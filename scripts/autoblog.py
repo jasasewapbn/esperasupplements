@@ -60,6 +60,7 @@ STATE = os.path.join(REPO_DIR, "content", ".autoblog-state.json")
 SITEMAP_POSTS = os.path.join(REPO_DIR, "content", "sitemap-posts.xml")
 SITE_URL = os.environ.get("SITE_URL",
     "https://esperasupplements.sukapinjem-c6f.workers.dev").rstrip("/")
+USEDPICS = os.path.join(REPO_DIR, "content", ".unsplash-terpakai.json")
 
 SYSTEM = (
     "Kamu penulis blog bisnis ternak Indonesia. Tulis artikel ORISINAL Bahasa Indonesia "
@@ -208,35 +209,58 @@ def generate(judul, kategori, dry_run):
         sys.exit(f"ERROR respons tak terduga: {str(body)[:200]}")
 
 
-def ambil_gambar_unsplash(slug, kategori):
-    """Unduh 1 foto relevan dari Unsplash. Kembalikan dict atau None.
-    Key dari env UNSPLASH_ACCESS_KEY — tidak pernah di-hardcode."""
+def _baca_terpakai():
+    try:
+        return set(json.load(open(USEDPICS, encoding="utf-8")))
+    except Exception:
+        return set()
+
+
+def _tambah_terpakai(pid):
+    try:
+        s = _baca_terpakai()
+        s.add(pid)
+        json.dump(sorted(s)[-500:], open(USEDPICS, "w", encoding="utf-8"))
+    except Exception:
+        pass
+
+
+def ambil_gambar_unsplash(slug, kategori, judul=""):
+    """Unduh 1 foto portrait dari Unsplash yang BELUM pernah dipakai.
+    Ambil 10 hasil dari halaman acak lalu pilih yang ID-nya belum tercatat,
+    sehingga tiap post beda gambar. Key dari env UNSPLASH_ACCESS_KEY."""
     key = os.environ.get("UNSPLASH_ACCESS_KEY", "").strip()
     if not key:
         print("INFO: UNSPLASH_ACCESS_KEY kosong — artikel tanpa foto.")
         return None
     try:
+        import random
         q = KATEGORI_QUERY.get(kategori, "livestock farm")
+        for w in re.findall(r"[a-zA-Z]{4,}", (judul or "").lower())[:2]:
+            if w not in STOPWORDS and w != kategori.lower():
+                q += " " + w
         url = UNSPLASH_SEARCH + "?" + urllib.parse.urlencode(
-            {"query": q, "per_page": 3, "orientation": "landscape",
-             "content_filter": "high"})
+            {"query": q, "per_page": 10, "page": random.randint(1, 3),
+             "orientation": "portrait", "content_filter": "high"})
         req = urllib.request.Request(
             url, headers={"Authorization": f"Client-ID {key}",
                           "Accept-Version": "v1",
                           "User-Agent": "Ternak-Autoblog/1.0"})
         with urllib.request.urlopen(req, timeout=30) as r:
             data = json.load(r) or {}
-        fotos = data.get("results") or []
+        fotos = [f for f in (data.get("results") or []) if (f.get("urls") or {}).get("regular")]
         if not fotos:
             print("INFO: Unsplash tidak mengembalikan foto — artikel tanpa foto.")
             return None
-        foto = fotos[0]
+        dipakai = _baca_terpakai()
+        segar = [f for f in fotos if f.get("id") not in dipakai]
+        foto = random.choice(segar) if segar else random.choice(fotos)
         urls = foto.get("urls") or {}
         src = urls.get("regular") or urls.get("full") or urls.get("raw")
         if not src:
             return None
         sep = "&" if "?" in src else "?"
-        src_dl = f"{src}{sep}w=1200&q=80&fm=jpg"
+        src_dl = f"{src}{sep}w=900&q=80&fm=jpg"
         dest = os.path.join(REPO_DIR, "content", "images", slug + ".jpg")
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         dl = urllib.request.Request(src_dl, headers={
@@ -244,6 +268,7 @@ def ambil_gambar_unsplash(slug, kategori):
                           "(KHTML, like Gecko) Chrome/120.0 Safari/537.36"})
         with urllib.request.urlopen(dl, timeout=60) as fr, open(dest, "wb") as fw:
             fw.write(fr.read())
+        _tambah_terpakai(foto.get("id", ""))
         user = (foto.get("user") or {})
         nama = user.get("name", "Unsplash")
         user_link = (user.get("links") or {}).get("html", "https://unsplash.com")
@@ -257,7 +282,8 @@ def ambil_gambar_unsplash(slug, kategori):
         print(f"OK gambar: content/images/{slug}.jpg (oleh {nama})")
         return {"image": f"/content/images/{slug}.jpg",
                 "credit": f"Foto oleh {nama} di Unsplash",
-                "url": f"{user_link}?utm_source=ternakblog&utm_medium=referral"}
+                "url": f"{user_link}?utm_source=ternakblog&utm_medium=referral",
+                "photo_id": foto.get("id", "")}
     except Exception as e:
         print(f"INFO: gambar dilewati ({e})")
         return None
@@ -313,13 +339,14 @@ def main():
                  f"tidak diterbitkan agar blog tidak rusak.")
 
     os.makedirs(POSTS, exist_ok=True)
-    gbr = None if a.dry_run else ambil_gambar_unsplash(slug, kategori)
+    gbr = None if a.dry_run else ambil_gambar_unsplash(slug, kategori, judul)
     tags = buat_tags(judul, kategori)
     img_meta = ""
     if gbr:
         img_meta = (f"image: {gbr['image']}\n"
                     f"image_credit: {json.dumps(gbr['credit'], ensure_ascii=False)}\n"
-                    f"image_url: {gbr['url']}\n")
+                    f"image_url: {gbr['url']}\n"
+                    f"photo_id: {gbr.get('photo_id', '')}\n")
     with open(target, "w", encoding="utf-8") as f:
         f.write(f"---\ntitle: {json.dumps(judul)}\ndate: {date.today().isoformat()}\n"
                 f"category: {kategori}\nexcerpt: {json.dumps(ringkasan)}\n"
@@ -330,7 +357,7 @@ def main():
     entry = {"slug": slug, "title": judul, "date": date.today().isoformat(),
              "category": kategori, "excerpt": ringkasan, "tags": tags}
     if gbr:
-        entry.update({"image": gbr["image"], "image_credit": gbr["credit"], "image_url": gbr["url"]})
+        entry.update({"image": gbr["image"], "image_credit": gbr["credit"], "image_url": gbr["url"], "photo_id": gbr.get("photo_id", "")})
     idx.insert(0, entry)
     idx.sort(key=lambda x: x.get("date", ""), reverse=True)
     json.dump(idx, open(INDEX, "w", encoding="utf-8"), ensure_ascii=False, indent=2)

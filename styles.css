@@ -148,7 +148,7 @@ ul.check{padding-left:20px}
 .single{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;margin-bottom:24px}
 .single .pad{padding:26px}
 .single h1{margin:8px 0 10px;line-height:1.3;font-size:1.7rem}
-.single .hero{height:300px;display:flex;align-items:flex-end;position:relative;color:#fff}
+.single .hero{height:360px;display:flex;align-items:flex-end;position:relative;color:#fff}
 .single .hero .shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7),transparent 60%)}
 .crumbs{font-size:.78rem;color:var(--muted);margin-bottom:6px}
 .crumbs a{color:var(--accent);text-decoration:none}

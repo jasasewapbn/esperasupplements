@@ -145,7 +145,7 @@ async function cariFoto(otomatis) {
     const q = $('pxq').value.trim() || ((PXQ[$('category').value] || 'livestock farm') + (kw ? ' ' + kw : ''));
     if (otomatis) $('pxsel').textContent = 'Mencarikan foto otomatis...';
     else setStatus('Mencari foto...', true);
-    const r = await fetch('https://api.unsplash.com/search/photos?' + new URLSearchParams({ query: q, per_page: 6, orientation: 'landscape' }), { headers: { Authorization: 'Client-ID ' + key } });
+    const r = await fetch('https://api.unsplash.com/search/photos?' + new URLSearchParams({ query: q, per_page: 8, page: 1 + Math.floor(Math.random() * 3), orientation: 'portrait' }), { headers: { Authorization: 'Client-ID ' + key } });
     if (!r.ok) throw new Error('Unsplash menolak key (HTTP ' + r.status + ')');
     const fotos = (await r.json()).results || [];
     if (!fotos.length) { $('pxsel').textContent = 'Tidak ada foto cocok — coba kata kunci lain atau publish tanpa foto.'; return; }
@@ -199,8 +199,8 @@ $('publish').onclick = async () => {
         await gh(imgPath, 'PUT', { message: `Foto: ${slug}`, content: b64bytes(buf), branch, ...(await getSha(imgPath) ? { sha: await getSha(imgPath) } : {}) });
         const credit = `Foto oleh ${selPhoto.user.name} di Unsplash`;
         const url = selPhoto.user.links.html + '?utm_source=ternakblog&utm_medium=referral';
-        imgMeta = `image: /content/images/${slug}.jpg\nimage_credit: ${JSON.stringify(credit)}\nimage_url: ${url}\n`;
-        imgEntry = { image: `/content/images/${slug}.jpg`, image_credit: credit, image_url: url };
+        imgMeta = `image: /content/images/${slug}.jpg\nimage_credit: ${JSON.stringify(credit)}\nimage_url: ${url}\nphoto_id: ${selPhoto.id}\n`;
+        imgEntry = { image: `/content/images/${slug}.jpg`, image_credit: credit, image_url: url, photo_id: selPhoto.id };
       } catch (e) { return setStatus('Gagal upload foto (tidak jadi publish): ' + e.message + '. Lepas foto lalu coba lagi.', false); }
     }
     const md = `---\ntitle: ${JSON.stringify(title)}\ndate: ${$('date').value}\ncategory: ${$('category').value}\nexcerpt: ${JSON.stringify($('excerpt').value)}\ntags: ${JSON.stringify(tagList)}\n${imgMeta}---\n\n${$('body').value}\n`;
