@@ -14,6 +14,7 @@
 <main class="tk-wrap tk-sec">
   <h1 class="tk-h" id="archive-title">Semua Artikel</h1>
   <p id="archive-count" class="tk-note"></p>
+  <div id="tagcloud" class="tagcloud" style="margin-bottom:18px"></div>
   <div id="list" class="tk-catgrid"></div>
 </main>
 
@@ -27,18 +28,24 @@
 <script>
 (function(){
   const q = new URLSearchParams(location.search);
-  const s = (q.get('s')||'').toLowerCase(), cat = q.get('cat')||'';
+  const s = (q.get('s')||'').toLowerCase(), cat = q.get('cat')||'', tag = q.get('tag')||'';
   const linkOf = p => '/blog/post.html?p='+p.slug;
   const bg = p => p.image ? ` style="background-image:url('${p.image}');background-size:cover;background-position:center"` : '';
   if(s) document.getElementById('archive-title').textContent = 'Pencarian: ' + q.get('s');
   if(cat) document.getElementById('archive-title').textContent = 'Kategori: ' + cat;
+  if(tag) document.getElementById('archive-title').textContent = 'Tag: #' + tag;
+  const chip = t => `<a href="/blog/?tag=${encodeURIComponent(t)}" style="color:#ddd;font-size:.72rem;text-decoration:none;margin-right:8px">#${t}</a>`;
   fetch('/content/index.json').then(r=>r.json()).then(dyn=>{
     let posts = Array.isArray(dyn)?dyn:[];
+    const counts = {};
+    dyn.forEach(p=>{(p.tags||[]).forEach(t=>{counts[t]=(counts[t]||0)+1;});});
+    document.getElementById('tagcloud').innerHTML = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,15).map(([t,n])=>`<a href="/blog/?tag=${encodeURIComponent(t)}">#${t} <span>${n}</span></a>`).join('') || '';
     if(cat) posts = posts.filter(p=>(p.category||'').toLowerCase()===cat.toLowerCase());
+    if(tag) posts = posts.filter(p=>((p.tags||[]).map(t=>(t||'').toLowerCase())).includes(tag.toLowerCase()));
     if(s) posts = posts.filter(p=>((p.title||'')+' '+(p.excerpt||'')).toLowerCase().includes(s));
     document.getElementById('archive-count').textContent = posts.length + ' artikel';
     document.getElementById('list').innerHTML = posts.length ? posts.map(p=>
-      `<a class="tk-card" href="${linkOf(p)}"${bg(p)}><span class="shade"></span><span class="cap"><span class="badge">${p.category||''}</span><span class="t">${p.title}</span><span class="d">${p.date||''} • ${p.excerpt||''}</span></span></a>`
+      `<a class="tk-card" href="${linkOf(p)}"${bg(p)}><span class="shade"></span><span class="cap"><span class="badge">${p.category||''}</span><span class="t">${p.title}</span><span class="d">${p.date||''} • ${p.excerpt||''}</span><span>${(p.tags||[]).slice(0,3).map(chip).join('')}</span></span></a>`
     ).join('') : '<p>Tidak ada artikel yang cocok. <a href="/blog/">Lihat semua</a></p>';
   }).catch(()=>{ document.getElementById('list').innerHTML='<p><a href="/blog/">Lihat semua artikel →</a></p>'; });
 })();

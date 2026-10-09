@@ -361,6 +361,12 @@ body.tk{background:#fff;color:#1a1a1a}
 .tk-bottom{background:#000;color:#777;font-size:.8rem}
 .tk-bottom .tk-wrap{display:flex;justify-content:space-between;padding:13px 20px;flex-wrap:wrap;gap:8px}
 .tk-bottom a{color:#999;text-decoration:none;margin-left:12px}
+.tagchips{margin:10px 0}
+.tagchips a{display:inline-block;border:1px solid #ddd;border-radius:999px;padding:3px 12px;font-size:.78rem;color:#333;text-decoration:none;margin:0 6px 6px 0;background:#fafafa}
+.tagchips a:hover{border-color:#111;color:#000}
+.tagcloud a{display:inline-block;border:1px solid #ddd;border-radius:999px;padding:4px 14px;font-size:.82rem;color:#333;text-decoration:none;margin:0 8px 8px 0;background:#fff}
+.tagcloud a:hover{border-color:#111;color:#000}
+.tagcloud span{color:#999;font-size:.75rem}
 /* halaman isi tetap pakai .single/.ed-* agar kompatibel */
 @media(max-width:960px){.tk-latest-grid{grid-template-columns:1fr}.tk-trend{grid-template-columns:1fr 1fr}.tk-catgrid{grid-template-columns:1fr 1fr}.tk-two{grid-template-columns:1fr}.tk-foot-grid{grid-template-columns:1fr 1fr}.tk-logo{font-size:2.2rem}}
 @media(max-width:640px){

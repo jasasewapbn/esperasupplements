@@ -36,19 +36,31 @@ function parseFM(t){
 (async()=>{
   const slug = new URLSearchParams(location.search).get('p');
   const box = document.getElementById('post');
+  let postCat = '', postTags = [];
   if(!slug){ box.innerHTML='<div class="pad"><h1>Slug kosong</h1></div>'; return; }
   try{
     const r = await fetch('/content/posts/'+slug+'.md');
     if(!r.ok) throw new Error('Artikel tidak ditemukan (tunggu deploy / cek slug).');
     const {meta, body} = parseFM(await r.text());
     const html = (window.marked) ? marked.parse(body) : '<pre>'+esc(body)+'</pre>';
+    let tags = [];
+    try{
+      const t = (meta.tags||'').trim();
+      tags = t.startsWith('[') ? JSON.parse(t) : t.split(',').map(s=>s.trim()).filter(Boolean);
+      if(!Array.isArray(tags)) tags = [];
+    }catch(e){ tags = []; }
+    postCat = meta.category||''; postTags = tags;
+    const tagChips = tags.length ? `<p class="tagchips">`+tags.map(t=>`<a href="/blog/?tag=${encodeURIComponent(t)}">#${esc(t)}</a>`).join(' ')+`</p>` : '';
     const heroBg = meta.image ? ` style="background-image:url('${meta.image}');background-size:cover;background-position:center"` : '';
     const credit = (meta.image_credit && meta.image_url) ? `<p style="font-size:.78rem;color:#888">Foto: <a href="${esc(meta.image_url)}" target="_blank" rel="noopener">${esc(meta.image_credit)}</a></p>` : '';
-    box.innerHTML = `<div class="hero cat-${esc(meta.category||'Umum')}"${heroBg}><span class="shade"></span></div><div class="pad"><p class="crumbs"><a href="/">Beranda</a> » <a href="/blog/">Artikel</a> » ${esc(meta.category||'')}</p><span class="badge">${esc(meta.category||'')}</span><h1>${esc(meta.title||slug)}</h1><div class="byline2"><span class="avatar">E</span><span>Redaksi Espera</span><span>${esc(meta.date||'')}</span></div>${credit}${html}<p><a href="/blog/">← Semua artikel</a></p></div>`;
+    box.innerHTML = `<div class="hero cat-${esc(meta.category||'Umum')}"${heroBg}><span class="shade"></span></div><div class="pad"><p class="crumbs"><a href="/">Beranda</a> » <a href="/blog/">Artikel</a> » ${esc(meta.category||'')}</p><span class="badge">${esc(meta.category||'')}</span><h1>${esc(meta.title||slug)}</h1><div class="byline2"><span class="avatar">E</span><span>Redaksi Espera</span><span>${esc(meta.date||'')}</span></div>${tagChips}${credit}${html}<p><a href="/blog/">← Semua artikel</a></p></div>`;
     document.title = (meta.title||slug)+' — EsperaSupplements';
   }catch(e){ box.innerHTML = '<div class="pad"><h1>Gagal memuat</h1><p>'+esc(e.message)+'</p></div>'; }
   fetch('/content/index.json').then(r=>r.json()).then(posts=>{
-    document.getElementById('rel').innerHTML = posts.filter(p=>p.slug!==slug).slice(0,3).map(p=>`<a class="thumb cat-${p.category||'Umum'}" href="/blog/post.html?p=${p.slug}"><span class="shade"></span><span class="cap"><span class="badge">${p.category||''}</span><h3>${p.title}</h3></span></a>`).join('');
+    const myTags = new Set(postTags.map(t=>(t||'').toLowerCase()));
+    const scored = posts.filter(p=>p.slug!==slug).map(p=>({p, s: ((p.tags||[]).filter(t=>myTags.has((t||'').toLowerCase())).length*2) + ((p.category||'')===postCat?1:0)}));
+    scored.sort((a,b)=>b.s-a.s);
+    document.getElementById('rel').innerHTML = scored.slice(0,3).map(x=>{const p=x.p; return `<a class="thumb cat-${p.category||'Umum'}" href="/blog/post.html?p=${p.slug}"><span class="shade"></span><span class="cap"><span class="badge">${p.category||''}</span><h3>${p.title}</h3></span></a>`;}).join('');
   }).catch(()=>{});
 })();
 </script>

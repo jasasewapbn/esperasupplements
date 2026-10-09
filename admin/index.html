@@ -2,20 +2,23 @@
 <html lang="id">
 <head>
 <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Admin — EsperaSupplements</title>
+<title>Admin — Tulis Artikel</title>
 <link rel="stylesheet" href="/styles.css" />
 <style>.form{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin:24px 0}
 label{display:block;font-weight:600;margin:14px 0 4px}
 input,select,textarea{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:10px;font:inherit}
 textarea{min-height:220px;font-family:ui-monospace,Menlo,Consolas,monospace}
+textarea#excerpt{min-height:0}
 .row{display:flex;gap:12px}.row>div{flex:1}
 .hint{color:#64748b;font-size:.88rem}
+.auto{font-size:.82rem;color:#15803d;font-weight:600}
 #status{margin-top:12px;font-weight:600}
 .photos{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
 .photos figure{margin:0;font-size:.72rem;color:#555}
 .photos img{width:100%;height:110px;object-fit:cover;border-radius:8px;cursor:pointer;border:3px solid transparent;display:block}
 .photos img.sel{border-color:#0ea5e9}
-.selinfo{font-size:.85rem;color:#15803d;font-weight:600;margin-top:8px}</style>
+.sug button{border:1px solid #cbd5e1;background:#f8fafc;border-radius:999px;padding:4px 14px;font-size:.8rem;cursor:pointer;margin:0 6px 6px 0}
+.sug button:hover{border-color:#111}</style>
 </head>
 <body>
 <header class="site-header"><div class="container nav">
@@ -23,10 +26,9 @@ textarea{min-height:220px;font-family:ui-monospace,Menlo,Consolas,monospace}
 <nav><a href="/">Beranda</a><a href="/blog/">Artikel</a><a href="/admin/">Admin</a></nav>
 </div></header>
 <main class="container">
-<h1>Admin Blog (Git-based)</h1>
-<p class="hint">100% statis untuk Cloudflare. Token GitHub + key Unsplash hanya di browser (localStorage), tidak masuk repo.
-Buat token di GitHub → Settings → Developer settings → Personal access tokens → Fine-grained:
-pilih repo <code>jasasewapbn/esperasupplements</code>, izin <code>Contents: Read and write</code>.</p>
+<h1>Tulis Artikel Manual</h1>
+<p class="hint">Kategori, tags, dan foto terisi <strong>otomatis</strong> dari judul — semuanya masih bisa diubah sebelum publish.
+Token GitHub + key Unsplash hanya tersimpan di browser ini (localStorage), tidak masuk repo.</p>
 
 <div class="form">
 <div class="row">
@@ -37,34 +39,38 @@ pilih repo <code>jasasewapbn/esperasupplements</code>, izin <code>Contents: Read
 <label>GitHub Token (hanya di browser ini)</label>
 <input id="token" type="password" placeholder="github_pat_..." autocomplete="off" />
 <div class="row">
-<div><button class="btn primary" id="saveToken" style="color:#00121c;margin-top:10px">Simpan token di browser</button></div>
+<div><button class="btn primary" id="saveToken" style="color:#00121c;margin-top:10px">Simpan token</button></div>
 <div><button class="btn" id="clearToken" style="color:#0f172a;margin-top:10px">Hapus token</button></div>
 </div>
-
 <hr style="margin:24px 0" />
 <label>Unsplash Access Key (hanya di browser ini, untuk foto otomatis)</label>
 <input id="pxkey" type="password" placeholder="key Unsplash..." autocomplete="off" />
 <div class="row">
-<div><button class="btn primary" id="savePx" style="color:#00121c;margin-top:10px">Simpan key Unsplash</button></div>
+<div><button class="btn primary" id="savePx" style="color:#00121c;margin-top:10px">Simpan key</button></div>
 <div><button class="btn" id="clearPx" style="color:#0f172a;margin-top:10px">Hapus key</button></div>
 </div>
-<p class="hint">Tanpa key pun bisa publish (artikel tanpa foto). Key tidak pernah masuk repo. Daftar gratis di unsplash.com/developers.</p>
 
 <hr style="margin:24px 0" />
-<label>Judul</label><input id="title" placeholder="Contoh: Panduan Kreatin untuk Pemula Gym" />
+<label>Judul</label><input id="title" placeholder="Contoh: Ternak Lele Kolam Terpal Modal 1 Juta" />
 <div class="row">
-<div><label>Slug (otomatis)</label><input id="slug" placeholder="panduan-kreatin-untuk-pemula-gym" /></div>
-<div><label>Kategori</label><select id="category"><option>Ayam</option><option>Kambing</option><option>Sapi</option><option>Ikan</option><option>Pakan</option><option>Bisnis</option></select></div>
+<div><label>Slug (otomatis)</label><input id="slug" placeholder="otomatis dari judul" /></div>
+<div><label>Kategori (otomatis terdeteksi)</label><select id="category"><option>Ayam</option><option>Kambing</option><option>Sapi</option><option>Ikan</option><option>Pakan</option><option>Bisnis</option></select></div>
 </div>
+<p class="auto" id="catnote"></p>
 <label>Tanggal</label><input id="date" type="date" />
-<label>Ringkasan (excerpt)</label><input id="excerpt" placeholder="1 kalimat ringkasan untuk kartu artikel" />
-<label>Foto Sampul (Unsplash — klik salah satu, opsional)</label>
+<label>Ringkasan (excerpt)</label><textarea id="excerpt" rows="2" placeholder="1 kalimat ringkasan untuk kartu artikel"></textarea>
+<label>Tags (otomatis disarankan, pisahkan koma)</label>
+<input id="tags" placeholder="mis. ayam, modal, pemula" />
+<div class="sug" id="tagsug"></div>
+
+<label>Foto Sampul (otomatis dicarikan sesuai judul — klik untuk ganti)</label>
 <div class="row">
-<div><input id="pxq" placeholder="kata kunci foto, mis. vitamins supplements" /></div>
-<div style="flex:0 0 auto"><button class="btn primary" id="pxfind" style="color:#00121c" type="button">Cari foto</button></div>
+<div><input id="pxq" placeholder="otomatis dari judul" /></div>
+<div style="flex:0 0 auto"><button class="btn primary" id="pxfind" style="color:#00121c" type="button">Cari ulang</button></div>
 </div>
 <div class="photos" id="pxgrid"></div>
-<p class="selinfo" id="pxsel"></p>
+<p class="auto" id="pxsel"></p>
+
 <label>Isi (Markdown)</label>
 <textarea id="body">## Subjudul
 
@@ -72,104 +78,142 @@ Tulis artikel di sini dengan format Markdown. **Tebal**, *miring*, list:
 
 - Poin 1
 - Poin 2
-
-*Artikel ini bersifat edukasi, bukan saran medis.*
 </textarea>
 <button class="btn primary" id="publish" style="color:#00121c;margin-top:14px">Publikasikan → commit ke GitHub</button>
 <p id="status"></p>
-<p class="hint">Cara kerja: admin membuat <code>content/posts/&lt;slug&gt;.md</code> + update <code>content/index.json</code> via GitHub API.
+<p class="hint">Publish membuat <code>content/posts/&lt;slug&gt;.md</code> + update <code>content/index.json</code> (termasuk tags).
 Cloudflare yang tersambung via Connect to Git deploy otomatis 1–2 menit.</p>
 </div>
 <p><a href="/blog/">← Lihat blog</a></p>
 </main>
 <script>
 const $ = id => document.getElementById(id);
-$('date').value = new Date().toISOString().slice(0,10);
-$('token').value = localStorage.getItem('gh_token') || '';
-$('title').addEventListener('input', e => {
-  $('slug').value = e.target.value.toLowerCase()
-    .replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-').slice(0,80);
-});
-$('saveToken').onclick = () => { localStorage.setItem('gh_token', $('token').value.trim()); setStatus('Token tersimpan di browser ini.', true); };
-$('clearToken').onclick = () => { localStorage.removeItem('gh_token'); $('token').value=''; setStatus('Token dihapus.', true); };
-$('pxkey').value = localStorage.getItem('uns_key') || '';
-$('savePx').onclick = () => { localStorage.setItem('uns_key', $('pxkey').value.trim()); setStatus('Key Unsplash tersimpan.', true); };
-$('clearPx').onclick = () => { localStorage.removeItem('uns_key'); $('pxkey').value=''; selPhoto=null; setStatus('Key Unsplash dihapus.', true); };
+// --- deteksi kategori otomatis dari kata kunci ---
+const CATS = [
+  ['Ayam', /ayam|broiler|petelur|telur|puyuh|joper|kalkun|kate|serama|bangkok|\bfcr\b/i],
+  ['Kambing', /kambing|domba|etawa|boer|garut|texel|merino|gaduh/i],
+  ['Sapi', /sapi|kerbau|perah|limousin|simental|brahman|pedet|\bpmk\b|\blsd\b/i],
+  ['Ikan', /ikan|lele|nila|gurame|udang|belut|sidat|koi|cupang|bioflok|tambak|vaname|qurban.*ikan/i],
+  ['Pakan', /pakan|maggot|konsentrat|pelet|dedak|menir|silase|azolla|probiotik|hijauan|odot|mineral/i],
+];
+const detectCat = t => { for (const [c, re] of CATS) if (re.test(t)) return c; return (/qurban|modal|untung|bisnis|kur|usaha|kerja sama|kemitraan/i.test(t) ? detectCatQurban(t) : 'Bisnis'); };
+const detectCatQurban = t => (/kambing|domba/i.test(t) ? 'Kambing' : 'Bisnis');
 const PXQ = {Ayam:'chicken poultry farm',Kambing:'goat farm',Sapi:'cow cattle farm',Ikan:'fish farm pond',Pakan:'grain animal feed',Bisnis:'livestock farm'};
+const STOP = new Set('yang dan untuk dengan dari pada agar atau adalah ini itu dalam tiap lebih tanpa serta sebagai oleh hingga cara tips panduan supaya berapa jenis manfaat bisnis ternak'.split(' '));
+const keywords = t => [...new Set((t.toLowerCase().match(/[a-z]{4,}/g) || []).filter(w => !STOP.has(w)))].slice(0, 5);
+
+$('date').value = new Date().toISOString().slice(0, 10);
+$('token').value = localStorage.getItem('gh_token') || '';
+$('pxkey').value = localStorage.getItem('uns_key') || '';
+
+let autoCat = true;
+$('category').addEventListener('change', () => { autoCat = false; $('catnote').textContent = ''; });
+
+let deb = null;
+$('title').addEventListener('input', e => {
+  const t = e.target.value;
+  $('slug').value = t.toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-').replace(/-+/g, '-').slice(0, 80);
+  if (autoCat && t.trim()) {
+    $('category').value = detectCat(t);
+    $('catnote').textContent = '✓ Kategori otomatis: ' + $('category').value + ' (bisa diubah manual)';
+  }
+  // saran tags otomatis
+  const kw = keywords(t);
+  const base = [$('category').value.toLowerCase(), ...kw].filter((v, i, a) => a.indexOf(v) === i).slice(0, 5);
+  $('tagsug').innerHTML = base.map(k => `<button type="button" data-t="${k}">+ ${k}</button>`).join('');
+  $('tagsug').querySelectorAll('button').forEach(b => b.onclick = () => {
+    const cur = $('tags').value.split(',').map(s => s.trim()).filter(Boolean);
+    if (!cur.map(s => s.toLowerCase()).includes(b.dataset.t.toLowerCase())) cur.push(b.dataset.t);
+    $('tags').value = cur.join(', ');
+  });
+  // foto otomatis (debounce)
+  clearTimeout(deb);
+  deb = setTimeout(() => { if (t.trim().length > 8) cariFoto(true); }, 1200);
+});
+
+$('saveToken').onclick = () => { localStorage.setItem('gh_token', $('token').value.trim()); setStatus('Token tersimpan di browser ini.', true); };
+$('clearToken').onclick = () => { localStorage.removeItem('gh_token'); $('token').value = ''; setStatus('Token dihapus.', true); };
+$('savePx').onclick = () => { localStorage.setItem('uns_key', $('pxkey').value.trim()); setStatus('Key Unsplash tersimpan.', true); };
+$('clearPx').onclick = () => { localStorage.removeItem('uns_key'); $('pxkey').value = ''; selPhoto = null; setStatus('Key Unsplash dihapus.', true); };
+
 let selPhoto = null;
-$('pxfind').onclick = async () => {
-  try{
+async function cariFoto(otomatis) {
+  try {
     const key = localStorage.getItem('uns_key');
-    if(!key) return setStatus('Isi & simpan key Unsplash dulu (atau publish tanpa foto).', false);
-    const q = $('pxq').value.trim() || PXQ[$('category').value.trim()] || 'supplements health';
-    setStatus('Mencari foto...', true);
-    const r = await fetch('https://api.unsplash.com/search/photos?' + new URLSearchParams({query:q, per_page:6, orientation:'landscape'}), {headers:{Authorization:'Client-ID '+key}});
-    if(!r.ok) throw new Error('Unsplash menolak key (HTTP '+r.status+') — cek Access Key.');
-    const j = await r.json();
-    const fotos = j.results || [];
-    if(!fotos.length) return setStatus('Tidak ada foto untuk kata kunci itu.', false);
-    selPhoto = null; $('pxsel').textContent = '';
-    $('pxgrid').innerHTML = fotos.map((f,i)=>`<figure><img data-i="${i}" src="${f.urls.small}" alt="${(f.alt_description||'').replace(/"/g,'')}" /><figcaption>${f.user.name}</figcaption></figure>`).join('');
+    if (!key) { if (!otomatis) setStatus('Isi & simpan key Unsplash dulu (atau publish tanpa foto).', false); return; }
+    const kw = keywords($('title').value).slice(0, 2).join(' ');
+    const q = $('pxq').value.trim() || ((PXQ[$('category').value] || 'livestock farm') + (kw ? ' ' + kw : ''));
+    if (otomatis) $('pxsel').textContent = 'Mencarikan foto otomatis...';
+    else setStatus('Mencari foto...', true);
+    const r = await fetch('https://api.unsplash.com/search/photos?' + new URLSearchParams({ query: q, per_page: 6, orientation: 'landscape' }), { headers: { Authorization: 'Client-ID ' + key } });
+    if (!r.ok) throw new Error('Unsplash menolak key (HTTP ' + r.status + ')');
+    const fotos = (await r.json()).results || [];
+    if (!fotos.length) { $('pxsel').textContent = 'Tidak ada foto cocok — coba kata kunci lain atau publish tanpa foto.'; return; }
     window._fotos = fotos;
-    $('pxgrid').querySelectorAll('img').forEach(img=>img.onclick=()=>{
-      $('pxgrid').querySelectorAll('img').forEach(x=>x.classList.remove('sel'));
-      img.classList.add('sel');
-      selPhoto = window._fotos[+img.dataset.i];
-      $('pxsel').textContent = 'Terpilih: foto oleh ' + selPhoto.user.name + ' (akan diunggah saat publish).';
-    });
-    setStatus('Klik salah satu foto untuk memilih.', true);
-  }catch(e){ setStatus('Gagal: '+e.message, false); }
-};
-function b64bytes(buf){ const b=new Uint8Array(buf); let s=''; const CH=0x8000; for(let i=0;i<b.length;i+=CH){ s+=String.fromCharCode.apply(null,b.subarray(i,i+CH)); } return btoa(s); }
-function setStatus(m, ok){ const s=$('status'); s.textContent=m; s.style.color= ok ? '#15803d' : '#b91c1c'; }
-function b64(s){ return btoa(unescape(encodeURIComponent(s))); }
-async function gh(path, method, body){
-  const owner=$('owner').value.trim(), repo=$('repo').value.trim();
+    $('pxgrid').innerHTML = fotos.map((f, i) => `<figure><img data-i="${i}" src="${f.urls.small}" alt="" /><figcaption>${f.user.name}</figcaption></figure>`).join('');
+    const pick = i => {
+      $('pxgrid').querySelectorAll('img').forEach(x => x.classList.remove('sel'));
+      $('pxgrid').querySelectorAll('img')[i].classList.add('sel');
+      selPhoto = window._fotos[i];
+      $('pxsel').textContent = '✓ Foto: oleh ' + selPhoto.user.name + ' (klik foto lain untuk ganti)';
+    };
+    $('pxgrid').querySelectorAll('img').forEach(img => img.onclick = () => pick(+img.dataset.i));
+    pick(0); // otomatis pilih yang paling relevan
+    if (!otomatis) setStatus('Klik foto untuk mengganti pilihan.', true);
+  } catch (e) { setStatus('Gagal: ' + e.message, false); }
+}
+$('pxfind').onclick = () => cariFoto(false);
+
+function b64bytes(buf) { const b = new Uint8Array(buf); let s = ''; const CH = 0x8000; for (let i = 0; i < b.length; i += CH) { s += String.fromCharCode.apply(null, b.subarray(i, i + CH)); } return btoa(s); }
+function setStatus(m, ok) { const s = $('status'); s.textContent = m; s.style.color = ok ? '#15803d' : '#b91c1c'; }
+function b64(s) { return btoa(unescape(encodeURIComponent(s))); }
+async function gh(path, method, body) {
+  const owner = $('owner').value.trim(), repo = $('repo').value.trim();
   const r = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-    method, headers:{ 'Authorization':'Bearer '+localStorage.getItem('gh_token'), 'Accept':'application/vnd.github+json', 'Content-Type':'application/json' },
+    method, headers: { 'Authorization': 'Bearer ' + localStorage.getItem('gh_token'), 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
     body: body ? JSON.stringify(body) : undefined });
-  const j = await r.json().catch(()=>({}));
-  if(!r.ok) throw new Error(j.message || ('HTTP '+r.status));
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.message || ('HTTP ' + r.status));
   return j;
 }
-async function getSha(path){
-  try { const j = await gh(path,'GET'); return j.sha; } catch(e){ return null; }
+async function getSha(path) {
+  try { const j = await gh(path, 'GET'); return j.sha; } catch (e) { return null; }
 }
 $('publish').onclick = async () => {
-  try{
+  try {
     const token = localStorage.getItem('gh_token');
-    if(!token) return setStatus('Isi & simpan token GitHub dulu.', false);
-    const slug = $('slug').value.trim(), title=$('title').value.trim();
-    if(!slug || !title) return setStatus('Judul & slug wajib diisi.', false);
+    if (!token) return setStatus('Isi & simpan token GitHub dulu.', false);
+    const slug = $('slug').value.trim(), title = $('title').value.trim();
+    if (!slug || !title) return setStatus('Judul & slug wajib diisi.', false);
+    const tagList = $('tags').value.split(',').map(s => s.trim()).filter(Boolean).slice(0, 8);
     setStatus('Mengirim ke GitHub...', true);
-    const owner=$('owner').value.trim(), repo=$('repo').value.trim(), branch=$('branch').value.trim()||'main';
+    const branch = $('branch').value.trim() || 'main';
     let imgMeta = '', imgEntry = {};
-    if(selPhoto){
-      try{
+    if (selPhoto) {
+      try {
         setStatus('Mengunduh & mengunggah foto...', true);
-        const src = selPhoto.urls.regular + '&w=1200&q=80&fm=jpg';
-        const fr = await fetch(src);
-        if(!fr.ok) throw new Error('unduh foto gagal (HTTP '+fr.status+')');
+        const fr = await fetch(selPhoto.urls.regular + '&w=1200&q=80&fm=jpg');
+        if (!fr.ok) throw new Error('unduh foto gagal (HTTP ' + fr.status + ')');
         const buf = await fr.arrayBuffer();
         const imgPath = `content/images/${slug}.jpg`;
-        await gh(imgPath,'PUT',{ message:`Foto: ${slug}`, content:b64bytes(buf), branch, ...(await getSha(imgPath) ? {sha: await getSha(imgPath)} : {}) });
+        await gh(imgPath, 'PUT', { message: `Foto: ${slug}`, content: b64bytes(buf), branch, ...(await getSha(imgPath) ? { sha: await getSha(imgPath) } : {}) });
         const credit = `Foto oleh ${selPhoto.user.name} di Unsplash`;
-        const url = selPhoto.user.links.html + '?utm_source=esperasupplements&utm_medium=referral';
+        const url = selPhoto.user.links.html + '?utm_source=ternakblog&utm_medium=referral';
         imgMeta = `image: /content/images/${slug}.jpg\nimage_credit: ${JSON.stringify(credit)}\nimage_url: ${url}\n`;
-        imgEntry = {image:`/content/images/${slug}.jpg`, image_credit:credit, image_url:url};
-      }catch(e){ return setStatus('Gagal upload foto (tidak jadi publish): '+e.message+'. Coba tanpa foto.', false); }
+        imgEntry = { image: `/content/images/${slug}.jpg`, image_credit: credit, image_url: url };
+      } catch (e) { return setStatus('Gagal upload foto (tidak jadi publish): ' + e.message + '. Lepas foto lalu coba lagi.', false); }
     }
-    const md = `---\ntitle: ${JSON.stringify(title)}\ndate: ${$('date').value}\ncategory: ${$('category').value}\nexcerpt: ${JSON.stringify($('excerpt').value)}\n${imgMeta}---\n\n${$('body').value}\n`;
+    const md = `---\ntitle: ${JSON.stringify(title)}\ndate: ${$('date').value}\ncategory: ${$('category').value}\nexcerpt: ${JSON.stringify($('excerpt').value)}\ntags: ${JSON.stringify(tagList)}\n${imgMeta}---\n\n${$('body').value}\n`;
     const mdPath = `content/posts/${slug}.md`;
-    await gh(mdPath,'PUT',{ message:`Post: ${title}`, content:b64(md), branch, ...(await getSha(mdPath) ? {sha: await getSha(mdPath)} : {}) });
+    await gh(mdPath, 'PUT', { message: `Post: ${title}`, content: b64(md), branch, ...(await getSha(mdPath) ? { sha: await getSha(mdPath) } : {}) });
     let idx = [];
-    try { const cur = await gh('content/index.json','GET'); idx = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g,''))))); var idxSha = cur.sha; } catch(e){ idx = []; }
-    idx = idx.filter(x=>x.slug!==slug);
-    idx.unshift({ slug, title, date:$('date').value, category:$('category').value, excerpt:$('excerpt').value, ...imgEntry });
-    idx.sort((a,b)=> (b.date||'').localeCompare(a.date||''));
-    await gh('content/index.json','PUT',{ message:`Index: ${slug}`, content:b64(JSON.stringify(idx,null,2)+'\n'), branch, ...(idxSha?{sha:idxSha}:{}) });
+    try { const cur = await gh('content/index.json', 'GET'); idx = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, ''))))); var idxSha = cur.sha; } catch (e) { idx = []; }
+    idx = idx.filter(x => x.slug !== slug);
+    idx.unshift({ slug, title, date: $('date').value, category: $('category').value, excerpt: $('excerpt').value, tags: tagList, ...imgEntry });
+    idx.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    await gh('content/index.json', 'PUT', { message: `Index: ${slug}`, content: b64(JSON.stringify(idx, null, 2) + '\n'), branch, ...(idxSha ? { sha: idxSha } : {}) });
     setStatus(`Berhasil! Lihat di /blog/post.html?p=${slug} (tunggu deploy 1–2 mnt).`, true);
-  }catch(e){ setStatus('Gagal: '+e.message, false); }
+  } catch (e) { setStatus('Gagal: ' + e.message, false); }
 };
 </script>
 </body>

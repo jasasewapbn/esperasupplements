@@ -34,6 +34,24 @@ KATEGORI_QUERY = {
 }
 KATEGORI_VALID = list(KATEGORI_QUERY.keys())
 
+STOPWORDS = {"yang", "dan", "untuk", "dengan", "dari", "pada", "agar", "atau",
+             "adalah", "ini", "itu", "dalam", "tiap", "lebih", "tanpa", "serta",
+             "sebagai", "oleh", "hingga", "cara", "tips", "panduan", "supaya",
+             "berapa", "jenis", "manfaat", "bisnis", "ternak"}
+
+
+def buat_tags(judul, kategori, maks=5):
+    """Tag otomatis: kategori + kata penting dari judul. Kembalikan list."""
+    tags = []
+    kl = kategori.lower()
+    for w in re.findall(r"[a-zA-Z]{4,}", judul.lower()):
+        if w in STOPWORDS or w in tags or w == kl:
+            continue
+        tags.append(w)
+        if len(tags) >= maks - 1:
+            break
+    return [kategori.lower()] + tags
+
 REPO_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 QUEUE = os.path.join(REPO_DIR, "content", "antrean-judul.txt")
 POSTS = os.path.join(REPO_DIR, "content", "posts")
@@ -240,6 +258,7 @@ def main():
 
     os.makedirs(POSTS, exist_ok=True)
     gbr = None if a.dry_run else ambil_gambar_unsplash(slug, kategori)
+    tags = buat_tags(judul, kategori)
     img_meta = ""
     if gbr:
         img_meta = (f"image: {gbr['image']}\n"
@@ -247,12 +266,13 @@ def main():
                     f"image_url: {gbr['url']}\n")
     with open(target, "w", encoding="utf-8") as f:
         f.write(f"---\ntitle: {json.dumps(judul)}\ndate: {date.today().isoformat()}\n"
-                f"category: {kategori}\nexcerpt: {json.dumps(ringkasan)}\n{img_meta}---\n\n{isi}\n")
+                f"category: {kategori}\nexcerpt: {json.dumps(ringkasan)}\n"
+                f"tags: {json.dumps(tags, ensure_ascii=False)}\n{img_meta}---\n\n{isi}\n")
 
     idx = json.load(open(INDEX, encoding="utf-8")) if os.path.exists(INDEX) else []
     idx = [x for x in idx if x.get("slug") != slug]
     entry = {"slug": slug, "title": judul, "date": date.today().isoformat(),
-             "category": kategori, "excerpt": ringkasan}
+             "category": kategori, "excerpt": ringkasan, "tags": tags}
     if gbr:
         entry.update({"image": gbr["image"], "image_credit": gbr["credit"], "image_url": gbr["url"]})
     idx.insert(0, entry)
