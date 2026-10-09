@@ -1,84 +1,9 @@
 [
   {
-    "slug": "tips-klaim-asuransi-mobil-banjir-agar-disetujui",
-    "title": "Tips Klaim Asuransi Mobil Banjir agar Disetujui",
+    "slug": "panduan-memilih-multivitamin-harian-dosis-label-dan-cara-minum-yang-benar",
+    "title": "Panduan Memilih Multivitamin Harian: Dosis, Label, dan Cara Minum yang Benar",
     "date": "2026-10-09",
-    "category": "Kendaraan",
-    "excerpt": "Klaim asuransi mobil akibat banjir sering ditolak karena pemilik kendaraan tidak memahami syarat polis dan prosedur yang benar, padahal dengan persiapan tepat klaim bisa disetujui.",
-    "image": "/content/images/tips-klaim-asuransi-mobil-banjir-agar-disetujui.jpg",
-    "image_credit": "Foto oleh Naveen  Prabhakaran J dari Pexels",
-    "image_url": "https://www.pexels.com/@naveen-prabhakaran-j-144473182"
-  },
-  {
-    "slug": "term-life-vs-whole-life-bedanya-dan-mana-yang-cocok",
-    "title": "Term Life vs Whole Life: Bedanya dan Mana yang Cocok?",
-    "date": "2026-10-08",
-    "category": "Jiwa",
-    "excerpt": "Term life dan whole life adalah dua jenis asuransi jiwa dengan perbedaan mendasar pada masa perlindungan, premi, dan komponen investasi yang membuat keduanya cocok untuk kebutuhan finansial yang berbe",
-    "image": "/content/images/term-life-vs-whole-life-bedanya-dan-mana-yang-cocok.jpg",
-    "image_credit": "Foto oleh Nataliya Vaitkevich dari Pexels",
-    "image_url": "https://www.pexels.com/@n-voitkevich"
-  },
-  {
-    "slug": "rawat-jalan-vs-rawat-inap-pahami-bedanya-sebelum-beli-polis",
-    "title": "Rawat Jalan vs Rawat Inap: Pahami Bedanya Sebelum Beli Polis",
-    "date": "2026-10-08",
-    "category": "Kesehatan",
-    "excerpt": "Memahami perbedaan manfaat rawat jalan dan rawat inap dalam polis asuransi kesehatan sangat penting agar Anda tidak salah pilih dan klaim ditolak saat dibutuhkan.",
-    "image": "/content/images/rawat-jalan-vs-rawat-inap-pahami-bedanya-sebelum-beli-polis.jpg",
-    "image_credit": "Foto oleh Vitaly Gariev dari Pexels",
-    "image_url": "https://www.pexels.com/@silverkblack"
-  },
-  {
-    "slug": "asuransi-kesehatan-untuk-anak-manfaat-yang-wajib-ada",
-    "title": "Asuransi Kesehatan untuk Anak: Manfaat yang Wajib Ada",
-    "date": "2026-10-08",
-    "category": "Kesehatan",
-    "excerpt": "Asuransi kesehatan anak penting dimiliki sejak dini, dan ada beberapa manfaat wajib yang sebaiknya ada dalam polis agar perlindungan benar-benar optimal.",
-    "image": "/content/images/asuransi-kesehatan-untuk-anak-manfaat-yang-wajib-ada.jpg",
-    "image_credit": "Foto oleh Vitaly Gariev dari Pexels",
-    "image_url": "https://www.pexels.com/@silverkblack"
-  },
-  {
-    "slug": "masa-tunggu-30-hari-asuransi-kesehatan-aturan-mainnya",
-    "title": "Masa Tunggu 30 Hari Asuransi Kesehatan: Aturan Mainnya",
-    "date": "2026-10-08",
-    "category": "Kesehatan",
-    "excerpt": "Masa tunggu 30 hari adalah periode awal polis asuransi kesehatan di mana klaim belum bisa dicairkan, kecuali untuk kecelakaan."
-  },
-  {
-    "slug": "bpjs-saja-cukup-atau-perlu-asuransi-swasta-tambahan",
-    "title": "BPJS Saja Cukup atau Perlu Asuransi Swasta Tambahan?",
-    "date": "2026-10-08",
-    "category": "Kesehatan",
-    "excerpt": "BPJS Kesehatan memberi perlindungan dasar yang luas, tetapi memahami celah pertanggungannya membantu Anda memutuskan apakah asuransi swasta tambahan benar-benar diperlukan."
-  },
-  {
-    "slug": "limit-tahunan-asuransi-kesehatan-berapa-yang-cukup-untuk-keluarga",
-    "title": "Limit Tahunan Asuransi Kesehatan: Berapa yang Cukup untuk Keluarga?",
-    "date": "2026-10-08",
-    "category": "Kesehatan",
-    "excerpt": "Memilih limit tahunan asuransi kesehatan keluarga sebaiknya disesuaikan dengan risiko penyakit kritis dan inflasi biaya medis, bukan sekadar mencari premi termurah."
-  },
-  {
-    "slug": "7-penyakit-yang-sering-ditolak-klaimnya-dan-cara-menghindarinya",
-    "title": "7 Penyakit yang Sering Ditolak Klaimnya dan Cara Menghindarinya",
-    "date": "2026-10-08",
-    "category": "Kesehatan",
-    "excerpt": "Beberapa penyakit kronis dan kondisi medis tertentu sering ditolak klaim asuransinya karena dianggap pre-existing atau tidak memenuhi syarat polis, sehingga penting memahami cara menghindarinya sejak"
-  },
-  {
-    "slug": "asuransi-kesehatan-cashless-vs-reimburse-mana-lebih-praktis",
-    "title": "Asuransi Kesehatan Cashless vs Reimburse: Mana Lebih Praktis?",
-    "date": "2026-10-08",
-    "category": "Kesehatan",
-    "excerpt": "Asuransi kesehatan cashless menawarkan kemudahan tanpa uang tunai di depan, sementara reimburse memberi keleluasaan memilih layanan kesehatan, namun keduanya punya trade-off masing-masing."
-  },
-  {
-    "slug": "cara-memilih-asuransi-kesehatan-untuk-orang-tua-di-atas-60-tahun",
-    "title": "Cara Memilih Asuransi Kesehatan untuk Orang Tua di Atas 60 Tahun",
-    "date": "2026-10-08",
-    "category": "Kesehatan",
-    "excerpt": "Memilih asuransi kesehatan untuk orang tua di atas 60 tahun butuh strategi khusus karena premi lebih mahal, ada batas usia masuk, dan risiko kesehatan yang meningkat."
+    "category": "Vitamin",
+    "excerpt": "Multivitamin yang bagus bukan yang paling lengkap, tapi yang dosisnya masuk akal, %AKG-nya jelas, dan cocok dengan pola makanmu."
   }
 ]

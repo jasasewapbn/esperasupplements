@@ -1,8 +1,7 @@
-# Worker "wp" — blog statis + route /api/berita (lihat src/worker.js).
+# Worker "esperasupplements" — blog statis (lihat src/worker.js).
 # Deploy otomatis dari GitHub via Dashboard (Deploy command: npx wrangler deploy).
-# Key NewsAPI diset di Dashboard (Settings > Variables and secrets > NEWS_API_KEY, tipe Secret),
-# BUKAN di file ini / repo ini.
-name = "wp"
+# Tidak ada secret di file ini.
+name = "esperasupplements"
 main = "src/worker.js"
 compatibility_date = "2026-01-01"
 

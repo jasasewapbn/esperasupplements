@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Admin — BlogInsurance.my.id</title>
+<title>Admin — EsperaSupplements</title>
 <link rel="stylesheet" href="/styles.css" />
 <style>.form{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:24px;margin:24px 0}
 label{display:block;font-weight:600;margin:14px 0 4px}
@@ -19,19 +19,19 @@ textarea{min-height:220px;font-family:ui-monospace,Menlo,Consolas,monospace}
 </head>
 <body>
 <header class="site-header"><div class="container nav">
-<a class="brand" href="/">🛡️ BlogInsurance<span>.my.id</span></a>
+<a class="brand" href="/">💊 Espera<span>Supplements</span></a>
 <nav><a href="/">Beranda</a><a href="/blog/">Artikel</a><a href="/admin/">Admin</a></nav>
 </div></header>
 <main class="container">
 <h1>Admin Blog (Git-based)</h1>
-<p class="hint">100% statis, cocok untuk Cloudflare Pages. Token GitHub hanya disimpan di browser kamu (localStorage), tidak pernah masuk ke repo.
-Buat token baru di GitHub → Settings → Developer settings → Personal access tokens → Fine-grained:
-pilih repo <code>dalamnegri/wp</code>, izin <code>Contents: Read and write</code>. Jangan pakai token lama yang bocor.</p>
+<p class="hint">100% statis untuk Cloudflare. Token GitHub + key Unsplash hanya di browser (localStorage), tidak masuk repo.
+Buat token di GitHub → Settings → Developer settings → Personal access tokens → Fine-grained:
+pilih repo <code>jasasewapbn/esperasupplements</code>, izin <code>Contents: Read and write</code>.</p>
 
 <div class="form">
 <div class="row">
-<div><label>Owner</label><input id="owner" value="dalamnegri" /></div>
-<div><label>Repo</label><input id="repo" value="wp" /></div>
+<div><label>Owner</label><input id="owner" value="jasasewapbn" /></div>
+<div><label>Repo</label><input id="repo" value="esperasupplements" /></div>
 <div><label>Branch</label><input id="branch" value="main" /></div>
 </div>
 <label>GitHub Token (hanya di browser ini)</label>
@@ -42,25 +42,25 @@ pilih repo <code>dalamnegri/wp</code>, izin <code>Contents: Read and write</code
 </div>
 
 <hr style="margin:24px 0" />
-<label>Pexels API Key (hanya di browser ini, untuk foto otomatis)</label>
-<input id="pxkey" type="password" placeholder="key Pexels..." autocomplete="off" />
+<label>Unsplash Access Key (hanya di browser ini, untuk foto otomatis)</label>
+<input id="pxkey" type="password" placeholder="key Unsplash..." autocomplete="off" />
 <div class="row">
-<div><button class="btn primary" id="savePx" style="color:#00121c;margin-top:10px">Simpan key Pexels</button></div>
+<div><button class="btn primary" id="savePx" style="color:#00121c;margin-top:10px">Simpan key Unsplash</button></div>
 <div><button class="btn" id="clearPx" style="color:#0f172a;margin-top:10px">Hapus key</button></div>
 </div>
-<p class="hint">Tanpa key pun bisa publish (artikel tanpa foto). Key tidak pernah masuk repo.</p>
+<p class="hint">Tanpa key pun bisa publish (artikel tanpa foto). Key tidak pernah masuk repo. Daftar gratis di unsplash.com/developers.</p>
 
 <hr style="margin:24px 0" />
-<label>Judul</label><input id="title" placeholder="Contoh: Asuransi Pendidikan Terbaik 2026" />
+<label>Judul</label><input id="title" placeholder="Contoh: Panduan Kreatin untuk Pemula Gym" />
 <div class="row">
-<div><label>Slug (otomatis)</label><input id="slug" placeholder="asuransi-pendidikan-terbaik-2026" /></div>
-<div><label>Kategori</label><input id="category" value="Kesehatan" /></div>
+<div><label>Slug (otomatis)</label><input id="slug" placeholder="panduan-kreatin-untuk-pemula-gym" /></div>
+<div><label>Kategori</label><select id="category"><option>Vitamin</option><option>Protein</option><option>Herbal</option><option>Fitness</option><option>Diet</option><option>Kesehatan</option></select></div>
 </div>
 <label>Tanggal</label><input id="date" type="date" />
 <label>Ringkasan (excerpt)</label><input id="excerpt" placeholder="1 kalimat ringkasan untuk kartu artikel" />
-<label>Foto Sampul (Pexels — klik salah satu, opsional)</label>
+<label>Foto Sampul (Unsplash — klik salah satu, opsional)</label>
 <div class="row">
-<div><input id="pxq" placeholder="kata kunci foto, mis. family health" /></div>
+<div><input id="pxq" placeholder="kata kunci foto, mis. vitamins supplements" /></div>
 <div style="flex:0 0 auto"><button class="btn primary" id="pxfind" style="color:#00121c" type="button">Cari foto</button></div>
 </div>
 <div class="photos" id="pxgrid"></div>
@@ -72,11 +72,13 @@ Tulis artikel di sini dengan format Markdown. **Tebal**, *miring*, list:
 
 - Poin 1
 - Poin 2
+
+*Artikel ini bersifat edukasi, bukan saran medis.*
 </textarea>
 <button class="btn primary" id="publish" style="color:#00121c;margin-top:14px">Publikasikan → commit ke GitHub</button>
 <p id="status"></p>
-<p class="hint">Cara kerja: admin membuat file <code>content/posts/&lt;slug&gt;.md</code> + update <code>content/index.json</code> via GitHub Contents API.
-Cloudflare Pages yang tersambung via Connect to Git akan deploy otomatis 1–2 menit. Baca di <code>/blog/post.html?p=&lt;slug&gt;</code>.</p>
+<p class="hint">Cara kerja: admin membuat <code>content/posts/&lt;slug&gt;.md</code> + update <code>content/index.json</code> via GitHub API.
+Cloudflare yang tersambung via Connect to Git deploy otomatis 1–2 menit.</p>
 </div>
 <p><a href="/blog/">← Lihat blog</a></p>
 </main>
@@ -90,30 +92,30 @@ $('title').addEventListener('input', e => {
 });
 $('saveToken').onclick = () => { localStorage.setItem('gh_token', $('token').value.trim()); setStatus('Token tersimpan di browser ini.', true); };
 $('clearToken').onclick = () => { localStorage.removeItem('gh_token'); $('token').value=''; setStatus('Token dihapus.', true); };
-$('pxkey').value = localStorage.getItem('px_key') || '';
-$('savePx').onclick = () => { localStorage.setItem('px_key', $('pxkey').value.trim()); setStatus('Key Pexels tersimpan di browser ini.', true); };
-$('clearPx').onclick = () => { localStorage.removeItem('px_key'); $('pxkey').value=''; selPhoto=null; setStatus('Key Pexels dihapus.', true); };
-const PXQ = {Kesehatan:'family health doctor',Jiwa:'happy family parents children',Kendaraan:'car driving road',Pendidikan:'children school education',Perjalanan:'travel airplane vacation',Syariah:'mosque islamic',Keuangan:'money finance savings',Properti:'house home exterior'};
+$('pxkey').value = localStorage.getItem('uns_key') || '';
+$('savePx').onclick = () => { localStorage.setItem('uns_key', $('pxkey').value.trim()); setStatus('Key Unsplash tersimpan.', true); };
+$('clearPx').onclick = () => { localStorage.removeItem('uns_key'); $('pxkey').value=''; selPhoto=null; setStatus('Key Unsplash dihapus.', true); };
+const PXQ = {Vitamin:'vitamins supplements',Protein:'protein powder fitness',Herbal:'herbal natural medicine',Fitness:'gym workout',Diet:'healthy food diet',Kesehatan:'healthy lifestyle wellness'};
 let selPhoto = null;
 $('pxfind').onclick = async () => {
   try{
-    const key = localStorage.getItem('px_key');
-    if(!key) return setStatus('Isi & simpan key Pexels dulu (atau publish tanpa foto).', false);
-    const q = $('pxq').value.trim() || PXQ[$('category').value.trim()] || 'insurance family';
+    const key = localStorage.getItem('uns_key');
+    if(!key) return setStatus('Isi & simpan key Unsplash dulu (atau publish tanpa foto).', false);
+    const q = $('pxq').value.trim() || PXQ[$('category').value.trim()] || 'supplements health';
     setStatus('Mencari foto...', true);
-    const r = await fetch('https://api.pexels.com/v1/search?' + new URLSearchParams({query:q, per_page:6, orientation:'landscape'}), {headers:{Authorization:key}});
-    if(!r.ok) throw new Error('Pexels menolak key (HTTP '+r.status+') — cek key di dashboard Pexels.');
+    const r = await fetch('https://api.unsplash.com/search/photos?' + new URLSearchParams({query:q, per_page:6, orientation:'landscape'}), {headers:{Authorization:'Client-ID '+key}});
+    if(!r.ok) throw new Error('Unsplash menolak key (HTTP '+r.status+') — cek Access Key.');
     const j = await r.json();
-    const fotos = j.photos || [];
+    const fotos = j.results || [];
     if(!fotos.length) return setStatus('Tidak ada foto untuk kata kunci itu.', false);
     selPhoto = null; $('pxsel').textContent = '';
-    $('pxgrid').innerHTML = fotos.map((f,i)=>`<figure><img data-i="${i}" src="${f.src.medium}" alt="${f.alt||''}" /><figcaption>${f.photographer}</figcaption></figure>`).join('');
+    $('pxgrid').innerHTML = fotos.map((f,i)=>`<figure><img data-i="${i}" src="${f.urls.small}" alt="${(f.alt_description||'').replace(/"/g,'')}" /><figcaption>${f.user.name}</figcaption></figure>`).join('');
     window._fotos = fotos;
     $('pxgrid').querySelectorAll('img').forEach(img=>img.onclick=()=>{
       $('pxgrid').querySelectorAll('img').forEach(x=>x.classList.remove('sel'));
       img.classList.add('sel');
       selPhoto = window._fotos[+img.dataset.i];
-      $('pxsel').textContent = 'Terpilih: foto oleh ' + selPhoto.photographer + ' (akan diunggah saat publish).';
+      $('pxsel').textContent = 'Terpilih: foto oleh ' + selPhoto.user.name + ' (akan diunggah saat publish).';
     });
     setStatus('Klik salah satu foto untuk memilih.', true);
   }catch(e){ setStatus('Gagal: '+e.message, false); }
@@ -145,20 +147,21 @@ $('publish').onclick = async () => {
     if(selPhoto){
       try{
         setStatus('Mengunduh & mengunggah foto...', true);
-        const fr = await fetch(selPhoto.src.large || selPhoto.src.medium);
+        const src = selPhoto.urls.regular + '&w=1200&q=80&fm=jpg';
+        const fr = await fetch(src);
         if(!fr.ok) throw new Error('unduh foto gagal (HTTP '+fr.status+')');
         const buf = await fr.arrayBuffer();
         const imgPath = `content/images/${slug}.jpg`;
         await gh(imgPath,'PUT',{ message:`Foto: ${slug}`, content:b64bytes(buf), branch, ...(await getSha(imgPath) ? {sha: await getSha(imgPath)} : {}) });
-        const credit = `Foto oleh ${selPhoto.photographer} dari Pexels`;
-        imgMeta = `image: /content/images/${slug}.jpg\nimage_credit: ${JSON.stringify(credit)}\nimage_url: ${selPhoto.photographer_url}\n`;
-        imgEntry = {image:`/content/images/${slug}.jpg`, image_credit:credit, image_url:selPhoto.photographer_url};
-      }catch(e){ return setStatus('Gagal upload foto (artikel tidak jadi dipublish): '+e.message+'. Coba tanpa foto.', false); }
+        const credit = `Foto oleh ${selPhoto.user.name} di Unsplash`;
+        const url = selPhoto.user.links.html + '?utm_source=esperasupplements&utm_medium=referral';
+        imgMeta = `image: /content/images/${slug}.jpg\nimage_credit: ${JSON.stringify(credit)}\nimage_url: ${url}\n`;
+        imgEntry = {image:`/content/images/${slug}.jpg`, image_credit:credit, image_url:url};
+      }catch(e){ return setStatus('Gagal upload foto (tidak jadi publish): '+e.message+'. Coba tanpa foto.', false); }
     }
     const md = `---\ntitle: ${JSON.stringify(title)}\ndate: ${$('date').value}\ncategory: ${$('category').value}\nexcerpt: ${JSON.stringify($('excerpt').value)}\n${imgMeta}---\n\n${$('body').value}\n`;
     const mdPath = `content/posts/${slug}.md`;
     await gh(mdPath,'PUT',{ message:`Post: ${title}`, content:b64(md), branch, ...(await getSha(mdPath) ? {sha: await getSha(mdPath)} : {}) });
-    // update index.json
     let idx = [];
     try { const cur = await gh('content/index.json','GET'); idx = JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g,''))))); var idxSha = cur.sha; } catch(e){ idx = []; }
     idx = idx.filter(x=>x.slug!==slug);

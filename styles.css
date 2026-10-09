@@ -296,3 +296,77 @@ body{background:var(--paper);color:var(--ink)}
   .brandrow .wrap{padding:14px}
   .mag-nav .wrap{padding:0 14px}
 }
+
+/* ===== Tema Tenku-like untuk EsperaSupplements (orisinal, minimal ala majalah) ===== */
+body.tk{background:#fff;color:#1a1a1a}
+.tk-wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.tk-top{background:#fafafa;border-bottom:1px solid #eee;font-size:.78rem}
+.tk-top .tk-wrap{display:flex;justify-content:space-between;align-items:center;padding:8px 20px;gap:10px}
+.tk-top a{color:#555;text-decoration:none;margin-right:14px}
+.tk-top a:hover{color:#000}
+.tk-top-right a{margin-right:0;margin-left:14px}
+.tk-mast{text-align:center;padding:34px 20px 18px;border-bottom:1px solid #eee}
+.tk-logo{font-family:Georgia,'Times New Roman',serif;font-size:3rem;font-weight:800;letter-spacing:-.02em;color:#111;text-decoration:none}
+.tk-tag{color:#777;font-size:.9rem;margin:6px 0 16px}
+.tk-search{display:flex;max-width:420px;margin:0 auto}
+.tk-search input{flex:1;border:1px solid #ddd;border-right:0;border-radius:999px 0 0 999px;padding:10px 16px;font:inherit;min-width:0}
+.tk-search button{border:1px solid #111;background:#111;color:#fff;border-radius:0 999px 999px 0;padding:10px 20px;cursor:pointer;font-weight:700}
+.tk-nav{border-bottom:2px solid #111;position:sticky;top:0;background:#fff;z-index:50}
+.tk-nav .tk-wrap{display:flex;justify-content:center;gap:2px;flex-wrap:wrap;padding:0 20px}
+.tk-nav a{color:#333;text-decoration:none;padding:13px 16px;font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.tk-nav a:hover,.tk-nav a.on{color:#000;box-shadow:inset 0 -3px 0 #111}
+.tk-burger{display:none}
+.tk-sec{margin:36px auto}
+.tk-h{font-family:Georgia,serif;font-size:1.6rem;margin:0 0 16px;padding-bottom:8px;border-bottom:2px solid #111}
+.tk-latest-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+.tk-latest-side{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tk-card{position:relative;border-radius:10px;overflow:hidden;display:flex;align-items:flex-end;min-height:180px;color:#fff;text-decoration:none;background:linear-gradient(135deg,#e8e8e8,#cfcfcf)}
+.tk-card.big{min-height:400px}
+.tk-card .shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.82) 8%,rgba(0,0,0,.2) 55%,transparent)}
+.tk-card .cap{position:relative;padding:16px}
+.tk-card .t{display:block;font-weight:800;line-height:1.35;margin-top:8px}
+.tk-card.big .t{font-size:1.5rem}
+.tk-card .d{display:block;font-size:.75rem;color:#ddd;margin-top:4px}
+.badge{display:inline-block;background:#111;color:#fff;font-size:.68rem;font-weight:800;text-transform:uppercase;padding:3px 10px;border-radius:4px;letter-spacing:.06em}
+.tk-trend{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.tk-tr{display:flex;gap:12px;text-decoration:none;color:#111;border-top:3px solid #111;padding-top:12px}
+.tk-tr .n{font-size:2rem;font-weight:900;color:#e5e5e5}
+.tk-tr .t{display:block;font-weight:700;line-height:1.4;margin-top:6px}
+.tk-tr:hover .t{text-decoration:underline}
+.tk-catblock{margin:28px 0}
+.tk-cathead{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;padding-bottom:8px;margin-bottom:14px}
+.tk-cathead h3{font-family:Georgia,serif;margin:0;font-size:1.25rem}
+.tk-cathead a{font-size:.85rem;color:#555;text-decoration:none}
+.tk-catgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tk-empty{color:#777;font-size:.9rem}
+.tk-two{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:36px auto}
+.tk-arch,.tk-news{background:#fafafa;border:1px solid #eee;border-radius:12px;padding:24px}
+.tk-arch-list{list-style:none;margin:0;padding:0}
+.tk-arch-list li{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed #ddd}
+.tk-arch-list a{color:#111;text-decoration:none;font-weight:600}
+.tk-arch-list span{color:#777;font-size:.85rem}
+.tk-note{font-size:.8rem;color:#777}
+.tk-note a{color:#111}
+.tk-news input{width:100%;padding:11px;border:1px solid #ddd;border-radius:8px;font:inherit;margin:10px 0}
+.tk-news button{width:100%;border:0;background:#111;color:#fff;font-weight:800;padding:12px;border-radius:8px;cursor:pointer;text-transform:uppercase}
+.tk-foot{background:#111;color:#bbb;margin-top:48px}
+.tk-foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:26px;padding:40px 20px}
+.tk-foot h4{color:#fff;margin:0 0 12px;font-size:.9rem;text-transform:uppercase;letter-spacing:.06em}
+.tk-foot a{color:#bbb;text-decoration:none;font-size:.87rem}
+.tk-foot a:hover{color:#fff}
+.tk-foot ul{list-style:none;margin:0;padding:0}
+.tk-foot li{margin:7px 0}
+.tk-foot p{font-size:.87rem;line-height:1.7}
+.tk-foot .tk-social a{margin-right:12px}
+.tk-bottom{background:#000;color:#777;font-size:.8rem}
+.tk-bottom .tk-wrap{display:flex;justify-content:space-between;padding:13px 20px;flex-wrap:wrap;gap:8px}
+.tk-bottom a{color:#999;text-decoration:none;margin-left:12px}
+/* halaman isi tetap pakai .single/.ed-* agar kompatibel */
+@media(max-width:960px){.tk-latest-grid{grid-template-columns:1fr}.tk-trend{grid-template-columns:1fr 1fr}.tk-catgrid{grid-template-columns:1fr 1fr}.tk-two{grid-template-columns:1fr}.tk-foot-grid{grid-template-columns:1fr 1fr}.tk-logo{font-size:2.2rem}}
+@media(max-width:640px){
+  .tk-burger{display:block;font-weight:800;padding:13px 4px;cursor:pointer;text-transform:uppercase;font-size:.85rem}
+  .tk-nav .tk-wrap{flex-direction:column;align-items:stretch}
+  .tk-nav .tk-wrap a{display:none;border-top:1px solid #eee}
+  .tk-nav .navcheck:checked ~ .tk-wrap a{display:block}
+  .tk-latest-side{grid-template-columns:1fr}.tk-trend{grid-template-columns:1fr}.tk-catgrid{grid-template-columns:1fr}.tk-foot-grid{grid-template-columns:1fr}.tk-card.big{min-height:260px}
+}
