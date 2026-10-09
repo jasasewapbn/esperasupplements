@@ -59,7 +59,7 @@ INDEX = os.path.join(REPO_DIR, "content", "index.json")
 STATE = os.path.join(REPO_DIR, "content", ".autoblog-state.json")
 SITEMAP_POSTS = os.path.join(REPO_DIR, "content", "sitemap-posts.xml")
 SITE_URL = os.environ.get("SITE_URL",
-    "https://esperasupplements.sukapinjem-c6f.workers.dev").rstrip("/")
+    "https://esperasupplements.co.uk").rstrip("/")
 USEDPICS = os.path.join(REPO_DIR, "content", ".unsplash-terpakai.json")
 
 SYSTEM = (
