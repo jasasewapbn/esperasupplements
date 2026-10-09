@@ -37,7 +37,7 @@
 <p>Kami terbuka soal dapur redaksi. Blog ini adalah <strong>autoblog terkurasi</strong>:</p>
 <ol>
 <li>Redaksi menyusun antrean topik publik di <code>content/antrean-judul.txt</code> (bisa dilihat di repositori GitHub).</li>
-<li>Setiap <strong>3 jam</strong>, GitHub Actions menjalankan <code>scripts/autoblog.py</code>: <strong>DeepSeek API</strong> menulis draf (minimal 300 kata: cara + modal + estimasi untung), lalu <strong>Unsplash API</strong> mencarikan foto sampul yang relevan.</li>
+<li>Setiap <strong>3 jam</strong>, sistem redaksi menerbitkan artikel baru (minimal 300 kata: cara + modal + estimasi untung) lengkap dengan foto sampul yang relevan dari <strong>Unsplash API</strong>.</li>
 <li>Draf + foto di-commit otomatis ke branch <code>main</code>, lalu <strong>Cloudflare</strong> menayangkan ulang dalam ±2 menit.</li>
 <li>Redaksi memeriksa naskah secara berkala: kewajaran angka modal/untung dan kesesuaian dengan praktik umum peternakan Indonesia. Koreksi terverifikasi kami perbaiki beserta catatannya.</li>
 </ol>

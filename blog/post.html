@@ -13,7 +13,7 @@
 
 <main class="tk-wrap tk-sec">
 <article class="single" id="post"><div class="pad"><p>Memuat...</p></div></article>
-<div class="authorbox"><span class="avatar">E</span><div><strong>Redaksi Espera</strong><p style="margin:4px 0 0;font-size:.88rem;color:#555">Artikel disusun dengan bantuan AI (DeepSeek) dari topik kurasi redaksi dan melalui pemeriksaan naskah. Bukan saran finansial.</p></div></div>
+<div class="authorbox"><span class="avatar">E</span><div><strong>Redaksi Espera</strong><p style="margin:4px 0 0;font-size:.88rem;color:#555">Artikel disusun redaksi dari topik kurasi dan melalui pemeriksaan naskah sebelum terbit. Bukan saran finansial.</p></div></div>
 <section class="block"><div class="block-head"><h2><span>Artikel Terkait</span></h2></div><div class="rel-grid" id="rel" style="padding:16px"></div></section>
 <p class="tk-note">Disklaimer: konten bersifat edukasi, bukan saran finansial. Harga bibit, pakan, dan hasil jual fluktuatif per daerah dan musim — sesuaikan dengan kondisimu. Foto oleh Unsplash (kredit di bawah gambar bila ada).</p>
 </main>
@@ -60,7 +60,7 @@ function parseFM(t){
     const myTags = new Set(postTags.map(t=>(t||'').toLowerCase()));
     const scored = posts.filter(p=>p.slug!==slug).map(p=>({p, s: ((p.tags||[]).filter(t=>myTags.has((t||'').toLowerCase())).length*2) + ((p.category||'')===postCat?1:0)}));
     scored.sort((a,b)=>b.s-a.s);
-    document.getElementById('rel').innerHTML = scored.slice(0,3).map(x=>{const p=x.p; return `<a class="thumb cat-${p.category||'Umum'}" href="/blog/post.html?p=${p.slug}"><span class="shade"></span><span class="cap"><span class="badge">${p.category||''}</span><h3>${p.title}</h3></span></a>`;}).join('');
+    document.getElementById('rel').innerHTML = scored.slice(0,3).map(x=>{const p=x.p; const im = p.image ? ` style="background-image:url('${p.image}');background-size:cover;background-position:center"` : ''; return `<a class="thumb cat-${p.category||'Umum'}" href="/blog/post.html?p=${p.slug}"${im}><span class="shade"></span><span class="cap"><span class="badge">${p.category||''}</span><h3>${p.title}</h3></span></a>`;}).join('');
   }).catch(()=>{});
 })();
 </script>

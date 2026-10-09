@@ -107,6 +107,12 @@ ul.check{padding-left:20px}
 .cat-Jiwa{background:linear-gradient(135deg,#8b5cf6,#4c1d95)}
 .cat-Kendaraan{background:linear-gradient(135deg,#f59e0b,#b45309)}
 .cat-Umum{background:linear-gradient(135deg,#334155,#0f172a)}
+.cat-Ayam{background:linear-gradient(135deg,#f59e0b,#92400e)}
+.cat-Kambing{background:linear-gradient(135deg,#16a34a,#14532d)}
+.cat-Sapi{background:linear-gradient(135deg,#78350f,#451a03)}
+.cat-Ikan{background:linear-gradient(135deg,#0ea5e9,#0c4a6e)}
+.cat-Pakan{background:linear-gradient(135deg,#a16207,#422006)}
+.cat-Bisnis{background:linear-gradient(135deg,#4f46e5,#1e1b4b)}
 .block{background:#fff;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:26px;overflow:hidden}
 .block-head{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--ink2);padding:12px 18px}
 .block-head h2{margin:0;font-size:1.05rem;text-transform:uppercase;letter-spacing:.03em}
