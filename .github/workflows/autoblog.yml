@@ -1,11 +1,9 @@
-name: Autoblog EsperaSupplements (DeepSeek + Unsplash)
-
-line 1
+name: Autoblog Ternak (DeepSeek + Unsplash)
 
 on:
   schedule:
-    # Tiap 5 jam: 00:00, 05:00, 10:00, 15:00, 20:00 UTC (~4-5 artikel/hari)
-    - cron: "0 */5 * * *"
+    # Tiap 3 jam: 00, 03, 06, 09, 12, 15, 18, 21 UTC (~8 artikel/hari)
+    - cron: "0 */3 * * *"
   workflow_dispatch:
     inputs:
       judul:
@@ -13,13 +11,15 @@ on:
         required: false
         default: ""
       kategori:
-        description: "Kategori (Vitamin/Protein/Herbal/Fitness/Diet/Kesehatan)"
+        description: "Kategori (Ayam/Kambing/Sapi/Ikan/Pakan/Bisnis)"
         required: false
         default: ""
 
 jobs:
   tulis:
     runs-on: ubuntu-latest
+
+line 20
     permissions: { contents: write }
     steps:
       - uses: actions/checkout@v4
