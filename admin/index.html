@@ -28,7 +28,10 @@ textarea#excerpt{min-height:0}
 <main class="container">
 <h1>Tulis Artikel Manual</h1>
 <p class="hint">Kategori, tags, dan foto terisi <strong>otomatis</strong> dari judul — semuanya masih bisa diubah sebelum publish.
-Token GitHub + key Unsplash hanya tersimpan di browser ini (localStorage), tidak masuk repo.</p>
+Token GitHub + key Unsplash hanya tersimpan di browser ini (localStorage), tidak masuk repo.
+Buat token di GitHub → Settings → Developer settings → Personal access tokens → Fine-grained:
+pilih repo <code>jasasewapbn/esperasupplements</code>, izin <code>Contents: Read and write</code>
+(+ <code>Actions: Read and write</code> untuk tombol Jalankan Autoblog).</p>
 
 <div class="form">
 <div class="row">
@@ -41,6 +44,19 @@ Token GitHub + key Unsplash hanya tersimpan di browser ini (localStorage), tidak
 <div class="row">
 <div><button class="btn primary" id="saveToken" style="color:#00121c;margin-top:10px">Simpan token</button></div>
 <div><button class="btn" id="clearToken" style="color:#0f172a;margin-top:10px">Hapus token</button></div>
+</div>
+
+<hr style="margin:24px 0" />
+<label>🤖 Jalankan Autoblog (tanpa buka GitHub)</label>
+<p class="hint">Memicu workflow <code>autoblog.yml</code> di GitHub Actions — artikel ditulis + foto diambil di server pakai Secrets, lalu terbit otomatis. Token butuh izin <strong>Actions: Read and write</strong>.</p>
+<div class="row">
+<div><input id="rjudul" placeholder="Judul manual (kosongkan = ambil antrean)" /></div>
+<div><select id="rkategori"><option value="">Otomatis (gilir kategori)</option><option>Ayam</option><option>Kambing</option><option>Sapi</option><option>Ikan</option><option>Pakan</option><option>Bisnis</option></select></div>
+<div style="flex:0 0 auto"><button class="btn primary" id="rundispatch" style="color:#00121c" type="button">▶ Jalankan</button></div>
+</div>
+<div class="row" style="margin-top:10px">
+<div style="flex:0 0 auto"><button class="btn" id="cekstatus" style="color:#0f172a" type="button">↻ Cek status</button></div>
+<div><p class="auto" id="runinfo" style="margin:10px 0 0"></p></div>
 </div>
 <hr style="margin:24px 0" />
 <label>Unsplash Access Key (hanya di browser ini, untuk foto otomatis)</label>
@@ -179,6 +195,49 @@ async function gh(path, method, body) {
 async function getSha(path) {
   try { const j = await gh(path, 'GET'); return j.sha; } catch (e) { return null; }
 }
+async function ghAPI(path, method, body) {
+  const owner = $('owner').value.trim(), repo = $('repo').value.trim();
+  const r = await fetch(`https://api.github.com/repos/${owner}/${repo}${path}`, {
+    method, headers: { 'Authorization': 'Bearer ' + localStorage.getItem('gh_token'), 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.message || ('HTTP ' + r.status));
+  return j;
+}
+let pollT = null;
+async function cekRun() {
+  try {
+    const j = await ghAPI('/actions/workflows/autoblog.yml/runs?per_page=1', 'GET');
+    const run = (j.workflow_runs || [])[0];
+    if (!run) { $('runinfo').textContent = 'Belum ada run.'; return null; }
+    const wkt = new Date(run.updated_at).toLocaleString('id-ID');
+    $('runinfo').innerHTML = `Status: <strong>${run.status}${run.conclusion ? ' / ' + run.conclusion : ''}</strong> • ${wkt} • <a href="${run.html_url}" target="_blank" rel="noopener">lihat di GitHub →</a>`;
+    return run;
+  } catch (e) { setStatus('Cek status gagal: ' + e.message + '. Token butuh izin Actions: Read and write.', false); return null; }
+}
+$('rundispatch').onclick = async () => {
+  try {
+    if (!localStorage.getItem('gh_token')) return setStatus('Isi & simpan token GitHub dulu.', false);
+    const inputs = {};
+    if ($('rjudul').value.trim()) inputs.judul = $('rjudul').value.trim();
+    if ($('rkategori').value) inputs.kategori = $('rkategori').value;
+    setStatus('Meminta GitHub menjalankan autoblog...', true);
+    await ghAPI('/actions/workflows/autoblog.yml/dispatches', 'POST', { ref: $('branch').value.trim() || 'main', inputs });
+    setStatus('Permintaan terkirim! Artikel terbit ±3–6 menit (tulis + foto + deploy).', true);
+    $('runinfo').textContent = 'Menunggu run dimulai...';
+    clearInterval(pollT);
+    let n = 0;
+    pollT = setInterval(async () => {
+      const run = await cekRun(); n++;
+      if ((run && run.status === 'completed') || n >= 30) {
+        clearInterval(pollT);
+        if (run && run.conclusion === 'success') setStatus('Selesai! Cek /blog/ (tunggu deploy Cloudflare 1–2 mnt).', true);
+      }
+    }, 20000);
+    setTimeout(() => cekRun(), 15000);
+  } catch (e) { setStatus('Gagal dispatch: ' + e.message + '. Pastikan token punya izin Actions: Read and write dan branch benar.', false); }
+};
+$('cekstatus').onclick = () => cekRun();
 $('publish').onclick = async () => {
   try {
     const token = localStorage.getItem('gh_token');
