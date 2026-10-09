@@ -2,6 +2,7 @@
 title: "Dari Sebutir Telur Menjadi Cuan: Panduan Lengkap Beternak Ayam dan Hitungan Modal serta Keuntungannya"
 date: 2026-10-09
 category: Ayam
+image: /content/images/telur%20ayam.jpg)
 excerpt: "Beternak ayam adalah usaha dengan modal awal yang relatif terjangkau. Dengan skala 100 ekor, modal awal berkisar Rp3.000.000–Rp4.500.000, dan dalam satu siklus pemeliharaan sekitar dua hingga tiga bulan, margin keuntungan bisa mencapai 20%–40%."
 tags: ["ayam","sebutir","telur","menjadi","cuan"]
 ---
