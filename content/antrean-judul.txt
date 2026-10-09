@@ -58,7 +58,6 @@ Ikan | Belut dan Sidat: Komoditas Ekspor Harga Tinggi
 Ikan | Pelet Pabrik vs Buatan Sendiri: Hitungan per Kg
 Ikan | Jual ke Pengepul vs Langsung: Selisih Harganya
 Ikan | Aerator dan Pompa Kolam: Biaya Listrik per Bulan
-Pakan | Bisnis Toko Pakan Ternak: Modal Awal dan Margin
 Pakan | Membuat Konsentrat Sendiri: Resep Ayam, Kambing, Sapi
 Pakan | Maggot BSF: Budidaya dan Harga Jual per Kg 2026
 Pakan | Azolla dan Lemna: Pakan Gratis dari Kolam
