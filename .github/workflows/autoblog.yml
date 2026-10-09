@@ -18,8 +18,6 @@ on:
 jobs:
   tulis:
     runs-on: ubuntu-latest
-
-line 20
     permissions: { contents: write }
     steps:
       - uses: actions/checkout@v4
