@@ -56,6 +56,7 @@ REPO_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 QUEUE = os.path.join(REPO_DIR, "content", "antrean-judul.txt")
 POSTS = os.path.join(REPO_DIR, "content", "posts")
 INDEX = os.path.join(REPO_DIR, "content", "index.json")
+STATE = os.path.join(REPO_DIR, "content", ".autoblog-state.json")
 
 SYSTEM = (
     "Kamu penulis blog bisnis ternak Indonesia. Tulis artikel ORISINAL Bahasa Indonesia "
@@ -114,25 +115,61 @@ def baca_antrean():
     return [l.strip() for l in open(QUEUE, encoding="utf-8") if l.strip()]
 
 
-def pop_queue():
-    lines = baca_antrean()
-    if not lines:
-        return None, None
-    first = lines[0]
-    if " | " in first:
-        kat, judul = first.split(" | ", 1)
+def _parse_baris(baris):
+    if " | " in baris:
+        kat, judul = baris.split(" | ", 1)
         kat = kat.strip() or "Bisnis"
         if kat not in KATEGORI_VALID:
             kat = "Bisnis"
         return kat, judul.strip()
-    return "Bisnis", first
+    return "Bisnis", baris.strip()
 
 
-def hapus_kepala(baris_mentah):
+def _baca_state():
+    try:
+        return json.load(open(STATE, encoding="utf-8")).get("terakhir", "")
+    except Exception:
+        return ""
+
+
+def _simpan_state(kat):
+    try:
+        json.dump({"terakhir": kat}, open(STATE, "w", encoding="utf-8"))
+    except Exception:
+        pass
+
+
+def pilih_antrean(paksa=""):
+    """Pilih 1 judul dari antrean dengan gilir kategori (round-robin) agar
+    artikel merata. Kembalikan (kategori, judul, baris_mentah)."""
     lines = baca_antrean()
-    if lines and lines[0] == baris_mentah:
+    if not lines:
+        return None, None, ""
+    parsed = [(_parse_baris(l), l) for l in lines]
+    if paksa in KATEGORI_VALID:
+        hit = next(((k, j, m) for (k, j), m in parsed if k == paksa and j), None)
+        if hit:
+            return hit
+    urutan = KATEGORI_VALID[:]
+    terakhir = _baca_state()
+    if terakhir in urutan:
+        i = urutan.index(terakhir)
+        urutan = urutan[i + 1:] + urutan[:i + 1]
+    for kat in urutan:
+        for (k, judul), mentah in parsed:
+            if k == kat and judul:
+                return kat, judul, mentah
+    (kat, judul), mentah = parsed[0]
+    return kat, judul, mentah
+
+
+def hapus_baris(baris_mentah):
+    """Hapus 1 baris antrean HANYA setelah artikel sukses ditulis."""
+    lines = baca_antrean()
+    sisa = [l for l in lines if l != baris_mentah]
+    if len(sisa) != len(lines):
         open(QUEUE, "w", encoding="utf-8").write(
-            "\n".join(lines[1:]) + ("\n" if len(lines) > 1 else ""))
+            "\n".join(sisa) + ("\n" if sisa else ""))
 
 
 def generate(judul, kategori, dry_run):
@@ -230,14 +267,16 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
-    q_kat, q_judul = pop_queue() if not a.judul.strip() else ("", "")
-    judul = a.judul.strip() or q_judul
-    kategori = a.kategori.strip() or q_kat or "Bisnis"
+    if a.judul.strip():
+        judul = a.judul.strip()
+        kategori = a.kategori.strip() or "Bisnis"
+        dari_antrean, baris_mentah = False, ""
+    else:
+        kategori, judul, baris_mentah = pilih_antrean(
+            a.kategori.strip() if a.kategori.strip() in KATEGORI_VALID else "")
+        dari_antrean = bool(judul)
     if kategori not in KATEGORI_VALID:
         kategori = "Bisnis"
-    dari_antrean = not a.judul.strip() and bool(q_judul)
-    baris_mentah = next((l for l in baca_antrean()
-                         if l == judul or l.endswith(" | " + judul)), judul) if judul else ""
     if not judul:
         import random
         kat_jud = random.choice(JUDUL_CADANGAN).split(" | ", 1)
@@ -279,7 +318,8 @@ def main():
     idx.sort(key=lambda x: x.get("date", ""), reverse=True)
     json.dump(idx, open(INDEX, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
     if dari_antrean and not a.dry_run and baris_mentah:
-        hapus_kepala(baris_mentah)
+        hapus_baris(baris_mentah)
+        _simpan_state(kategori)
     print(f"OK: {target} ({hitung_kata(isi)} kata)")
 
 
