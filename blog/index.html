@@ -4,6 +4,10 @@
 <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Arsip Artikel — EsperaTernak</title>
 <meta name="description" content="Arsip artikel bisnis ternak ayam, kambing, sapi, ikan, dan pakan dari EsperaTernak." />
+<link rel="canonical" href="https://esperasupplements.sukapinjem-c6f.workers.dev/blog/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="EsperaTernak" />
+<meta property="og:title" content="Arsip Artikel — EsperaTernak" />
 <link rel="stylesheet" href="/styles.css" />
 </head>
 <body class="tk">
@@ -34,7 +38,7 @@
   if(s) document.getElementById('archive-title').textContent = 'Pencarian: ' + q.get('s');
   if(cat) document.getElementById('archive-title').textContent = 'Kategori: ' + cat;
   if(tag) document.getElementById('archive-title').textContent = 'Tag: #' + tag;
-  const chip = t => `<a href="/blog/?tag=${encodeURIComponent(t)}" style="color:#ddd;font-size:.72rem;text-decoration:none;margin-right:8px">#${t}</a>`;
+  const chip = t => `<span class="tk-chipt">#${t}</span>`;
   fetch('/content/index.json').then(r=>r.json()).then(dyn=>{
     let posts = Array.isArray(dyn)?dyn:[];
     const counts = {};
@@ -45,7 +49,7 @@
     if(s) posts = posts.filter(p=>((p.title||'')+' '+(p.excerpt||'')).toLowerCase().includes(s));
     document.getElementById('archive-count').textContent = posts.length + ' artikel';
     document.getElementById('list').innerHTML = posts.length ? posts.map(p=>
-      `<a class="tk-card" href="${linkOf(p)}"${bg(p)}><span class="shade"></span><span class="cap"><span class="badge">${p.category||''}</span><span class="t">${p.title}</span><span class="d">${p.date||''} • ${p.excerpt||''}</span><span>${(p.tags||[]).slice(0,3).map(chip).join('')}</span></span></a>`
+      `<a class="tk-card" href="${linkOf(p)}"${bg(p)}><span class="shade"></span><span class="cap"><span class="badge">${p.category||''}</span><span class="t">${p.title}</span><span class="d">${p.date||''} • ${p.excerpt||''}</span><span>${(p.tags||[]).slice(0,4).map(chip).join('')}</span></span></a>`
     ).join('') : '<p>Tidak ada artikel yang cocok. <a href="/blog/">Lihat semua</a></p>';
   }).catch(()=>{ document.getElementById('list').innerHTML='<p><a href="/blog/">Lihat semua artikel →</a></p>'; });
 })();

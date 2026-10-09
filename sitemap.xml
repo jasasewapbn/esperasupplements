@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- GANTI DOMAIN di bawah dengan domain Cloudflare-mu setelah custom domain aktif -->
-  <url><loc>https://esperasupplements.pages.dev/</loc></url>
-  <url><loc>https://esperasupplements.pages.dev/blog/</loc></url>
-  <url><loc>https://esperasupplements.pages.dev/blog/post.html?p=panduan-memilih-multivitamin-harian-dosis-label-dan-cara-minum-yang-benar</loc></url>
-  <url><loc>https://esperasupplements.pages.dev/tentang.html</loc></url>
-  <url><loc>https://esperasupplements.pages.dev/kontak.html</loc></url>
-  <url><loc>https://esperasupplements.pages.dev/tos.html</loc></url>
-  <url><loc>https://esperasupplements.pages.dev/privasi.html</loc></url>
-  <url><loc>https://esperasupplements.pages.dev/dmca.html</loc></url>
-</urlset>
+<!-- Sitemap index — daftarkan URL ini ke Google Search Console -->
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap><loc>https://esperasupplements.sukapinjem-c6f.workers.dev/sitemap-pages.xml</loc></sitemap>
+  <sitemap><loc>https://esperasupplements.sukapinjem-c6f.workers.dev/content/sitemap-posts.xml</loc></sitemap>
+</sitemapindex>

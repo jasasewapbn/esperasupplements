@@ -40,7 +40,7 @@ STOPWORDS = {"yang", "dan", "untuk", "dengan", "dari", "pada", "agar", "atau",
              "berapa", "jenis", "manfaat", "bisnis", "ternak"}
 
 
-def buat_tags(judul, kategori, maks=5):
+def buat_tags(judul, kategori, maks=10):
     """Tag otomatis: kategori + kata penting dari judul. Kembalikan list."""
     tags = []
     kl = kategori.lower()
@@ -57,6 +57,9 @@ QUEUE = os.path.join(REPO_DIR, "content", "antrean-judul.txt")
 POSTS = os.path.join(REPO_DIR, "content", "posts")
 INDEX = os.path.join(REPO_DIR, "content", "index.json")
 STATE = os.path.join(REPO_DIR, "content", ".autoblog-state.json")
+SITEMAP_POSTS = os.path.join(REPO_DIR, "content", "sitemap-posts.xml")
+SITE_URL = os.environ.get("SITE_URL",
+    "https://esperasupplements.sukapinjem-c6f.workers.dev").rstrip("/")
 
 SYSTEM = (
     "Kamu penulis blog bisnis ternak Indonesia. Tulis artikel ORISINAL Bahasa Indonesia "
@@ -260,6 +263,20 @@ def ambil_gambar_unsplash(slug, kategori):
         return None
 
 
+def tulis_sitemap(posts):
+    """Tulis ulang content/sitemap-posts.xml dari index (untuk Google Search Console).
+    Di-commit otomatis karena berada di dalam folder content/."""
+    urls = "\n".join(
+        f'  <url><loc>{SITE_URL}/blog/post.html?p={p["slug"]}</loc>'
+        f'<lastmod>{p.get("date", date.today().isoformat())}</lastmod>'
+        f"<changefreq>monthly</changefreq><priority>0.7</priority></url>"
+        for p in posts if p.get("slug"))
+    xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+           f"{urls}\n</urlset>\n")
+    open(SITEMAP_POSTS, "w", encoding="utf-8").write(xml)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--judul", default="")
@@ -317,6 +334,8 @@ def main():
     idx.insert(0, entry)
     idx.sort(key=lambda x: x.get("date", ""), reverse=True)
     json.dump(idx, open(INDEX, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    if not a.dry_run:
+        tulis_sitemap(idx)
     if dari_antrean and not a.dry_run and baris_mentah:
         hapus_baris(baris_mentah)
         _simpan_state(kategori)

@@ -373,6 +373,24 @@ body.tk{background:#fff;color:#1a1a1a}
 .tagcloud a{display:inline-block;border:1px solid #ddd;border-radius:999px;padding:4px 14px;font-size:.82rem;color:#333;text-decoration:none;margin:0 8px 8px 0;background:#fff}
 .tagcloud a:hover{border-color:#111;color:#000}
 .tagcloud span{color:#999;font-size:.75rem}
+/* kartu arsip/kategori: rapi sejajar, teks dipotong seragam */
+.tk-catgrid{align-items:stretch}
+.tk-catgrid .tk-card{min-height:260px;max-height:340px}
+.tk-card .cap{min-width:0;width:100%}
+.tk-card .t{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tk-card .d{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.tk-chipt{color:#ddd;font-size:.72rem;margin-right:8px;white-space:nowrap}
+/* mobile & media generik */
+img{max-width:100%;height:auto}
+.single .pad,.post{overflow-wrap:break-word;word-break:break-word}
+@media(max-width:640px){
+  .single table{display:block;overflow-x:auto}
+  .tk-search{width:100%}
+  .tk-search input{min-width:0}
+  .tk-catgrid .tk-card{min-height:220px;max-height:none}
+  .photos{grid-template-columns:1fr 1fr}
+  .tagcloud a{font-size:.78rem;padding:4px 12px}
+}
 /* halaman isi tetap pakai .single/.ed-* agar kompatibel */
 @media(max-width:960px){.tk-latest-grid{grid-template-columns:1fr}.tk-trend{grid-template-columns:1fr 1fr}.tk-catgrid{grid-template-columns:1fr 1fr}.tk-two{grid-template-columns:1fr}.tk-foot-grid{grid-template-columns:1fr 1fr}.tk-logo{font-size:2.2rem}}
 @media(max-width:640px){

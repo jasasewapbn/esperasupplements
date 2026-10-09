@@ -100,7 +100,7 @@ const detectCat = t => { for (const [c, re] of CATS) if (re.test(t)) return c; r
 const detectCatQurban = t => (/kambing|domba/i.test(t) ? 'Kambing' : 'Bisnis');
 const PXQ = {Ayam:'chicken poultry farm',Kambing:'goat farm',Sapi:'cow cattle farm',Ikan:'fish farm pond',Pakan:'grain animal feed',Bisnis:'livestock farm'};
 const STOP = new Set('yang dan untuk dengan dari pada agar atau adalah ini itu dalam tiap lebih tanpa serta sebagai oleh hingga cara tips panduan supaya berapa jenis manfaat bisnis ternak'.split(' '));
-const keywords = t => [...new Set((t.toLowerCase().match(/[a-z]{4,}/g) || []).filter(w => !STOP.has(w)))].slice(0, 5);
+const keywords = t => [...new Set((t.toLowerCase().match(/[a-z]{4,}/g) || []).filter(w => !STOP.has(w)))].slice(0, 9);
 
 $('date').value = new Date().toISOString().slice(0, 10);
 $('token').value = localStorage.getItem('gh_token') || '';
@@ -119,7 +119,7 @@ $('title').addEventListener('input', e => {
   }
   // saran tags otomatis
   const kw = keywords(t);
-  const base = [$('category').value.toLowerCase(), ...kw].filter((v, i, a) => a.indexOf(v) === i).slice(0, 5);
+  const base = [$('category').value.toLowerCase(), ...kw].filter((v, i, a) => a.indexOf(v) === i).slice(0, 10);
   $('tagsug').innerHTML = base.map(k => `<button type="button" data-t="${k}">+ ${k}</button>`).join('');
   $('tagsug').querySelectorAll('button').forEach(b => b.onclick = () => {
     const cur = $('tags').value.split(',').map(s => s.trim()).filter(Boolean);
@@ -185,7 +185,7 @@ $('publish').onclick = async () => {
     if (!token) return setStatus('Isi & simpan token GitHub dulu.', false);
     const slug = $('slug').value.trim(), title = $('title').value.trim();
     if (!slug || !title) return setStatus('Judul & slug wajib diisi.', false);
-    const tagList = $('tags').value.split(',').map(s => s.trim()).filter(Boolean).slice(0, 8);
+    const tagList = $('tags').value.split(',').map(s => s.trim()).filter(Boolean).slice(0, 10);
     setStatus('Mengirim ke GitHub...', true);
     const branch = $('branch').value.trim() || 'main';
     let imgMeta = '', imgEntry = {};

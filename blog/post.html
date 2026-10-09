@@ -2,7 +2,14 @@
 <html lang="id">
 <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Artikel — EsperaTernak</title>
-<meta name="description" content="Artikel bisnis ternak: cara, modal, dan estimasi untung. Dari EsperaTernak." />
+<meta name="description" id="mdesc" content="Artikel bisnis ternak: cara, modal, dan estimasi untung. Dari EsperaTernak." />
+<link rel="canonical" id="mcan" href="https://esperasupplements.sukapinjem-c6f.workers.dev/blog/" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="EsperaTernak" />
+<meta property="og:title" id="mogt" content="Artikel — EsperaTernak" />
+<meta property="og:description" id="mogd" content="Artikel bisnis ternak: cara, modal, dan estimasi untung." />
+<meta property="og:image" id="mogi" content="" />
+<script type="application/ld+json" id="mjson">{"@context":"https://schema.org","@type":"Blog","name":"EsperaTernak"}</script>
 <link rel="stylesheet" href="/styles.css" />
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
 </head>
@@ -55,6 +62,15 @@ function parseFM(t){
     const credit = (meta.image_credit && meta.image_url) ? `<p style="font-size:.78rem;color:#888">Foto: <a href="${esc(meta.image_url)}" target="_blank" rel="noopener">${esc(meta.image_credit)}</a></p>` : '';
     box.innerHTML = `<div class="hero cat-${esc(meta.category||'Umum')}"${heroBg}><span class="shade"></span></div><div class="pad"><p class="crumbs"><a href="/">Beranda</a> » <a href="/blog/">Artikel</a> » ${esc(meta.category||'')}</p><span class="badge">${esc(meta.category||'')}</span><h1>${esc(meta.title||slug)}</h1><div class="byline2"><span class="avatar">E</span><span>Redaksi Espera</span><span>${esc(meta.date||'')}</span></div>${tagChips}${credit}${html}<p><a href="/blog/">← Semua artikel</a></p></div>`;
     document.title = (meta.title||slug)+' — EsperaTernak';
+    // SEO dinamis: deskripsi, canonical, OG, JSON-LD
+    const pageUrl = location.origin + '/blog/post.html?p=' + slug;
+    const setM = (id, attr, val) => { const el = document.getElementById(id); if (el) el.setAttribute(attr, val); };
+    setM('mdesc', 'content', meta.excerpt || meta.title || slug);
+    setM('mcan', 'href', pageUrl);
+    setM('mogt', 'content', (meta.title || slug) + ' — EsperaTernak');
+    setM('mogd', 'content', meta.excerpt || meta.title || slug);
+    if (meta.image) setM('mogi', 'content', location.origin + meta.image);
+    document.getElementById('mjson').textContent = JSON.stringify({"@context": "https://schema.org", "@type": "BlogPosting", headline: meta.title || slug, datePublished: meta.date || '', image: meta.image ? [location.origin + meta.image] : [], author: {"@type": "Organization", name: "Redaksi Espera"}, mainEntityOfPage: pageUrl});
   }catch(e){ box.innerHTML = '<div class="pad"><h1>Gagal memuat</h1><p>'+esc(e.message)+'</p></div>'; }
   fetch('/content/index.json').then(r=>r.json()).then(posts=>{
     const myTags = new Set(postTags.map(t=>(t||'').toLowerCase()));
