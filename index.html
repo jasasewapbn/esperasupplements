@@ -16,11 +16,11 @@
 
 <header class="tk-mast"><div class="tk-wrap">
   <a class="tk-logo" href="/">Espera</a>
-  <p class="tk-tag">Panduan Suplemen &amp; Nutrisi Indonesia — update tiap 5 jam</p>
-  <form class="tk-search" action="/blog/" method="get"><input type="search" name="s" placeholder="Cari vitamin, protein, herbal..." /><button type="submit">Cari</button></form>
+  <p class="tk-tag">Panduan Ternak Menghasilkan — update tiap 3 jam</p>
+  <form class="tk-search" action="/blog/" method="get"><input type="search" name="s" placeholder="Cari ayam, kambing, sapi, lele..." /><button type="submit">Cari</button></form>
 </div></header>
 
-<nav class="tk-nav"><input type="checkbox" id="navtoggle" class="navcheck" /><div class="tk-wrap"><label class="tk-burger" for="navtoggle">☰ Menu</label><a href="/" class="on">Beranda</a><a href="/blog/?cat=Vitamin">Vitamin</a><a href="/blog/?cat=Protein">Protein</a><a href="/blog/?cat=Herbal">Herbal</a><a href="/blog/?cat=Fitness">Fitness</a><a href="/blog/?cat=Diet">Diet</a><a href="/blog/?cat=Kesehatan">Kesehatan</a></div></nav>
+<nav class="tk-nav"><input type="checkbox" id="navtoggle" class="navcheck" /><div class="tk-wrap"><label class="tk-burger" for="navtoggle">☰ Menu</label><a href="/" class="on">Beranda</a><a href="/blog/?cat=Ayam">Ayam</a><a href="/blog/?cat=Kambing">Kambing</a><a href="/blog/?cat=Sapi">Sapi</a><a href="/blog/?cat=Ikan">Ikan</a><a href="/blog/?cat=Pakan">Pakan</a><a href="/blog/?cat=Bisnis">Bisnis</a></div></nav>
 
 <main class="tk-wrap">
   <section class="tk-sec">
@@ -52,7 +52,7 @@
 
 <footer class="tk-foot"><div class="tk-wrap tk-foot-grid">
   <div><h4>EsperaSupplements</h4><p>Blog edukasi suplemen &amp; nutrisi Indonesia. Artikel ditulis AI (DeepSeek), foto Unsplash, dikurasi redaksi. Bukan saran medis.</p><p class="tk-social"><a href="#">Facebook</a><a href="#">Twitter</a><a href="#">Instagram</a><a href="#">YouTube</a></p></div>
-  <div><h4>Kategori</h4><ul><li><a href="/blog/?cat=Vitamin">Vitamin</a></li><li><a href="/blog/?cat=Protein">Protein</a></li><li><a href="/blog/?cat=Herbal">Herbal</a></li><li><a href="/blog/?cat=Fitness">Fitness</a></li><li><a href="/blog/?cat=Diet">Diet</a></li><li><a href="/blog/?cat=Kesehatan">Kesehatan</a></li></ul></div>
+  <div><h4>Kategori</h4><ul><li><a href="/blog/?cat=Ayam">Ayam</a></li><li><a href="/blog/?cat=Kambing">Kambing</a></li><li><a href="/blog/?cat=Sapi">Sapi</a></li><li><a href="/blog/?cat=Ikan">Ikan</a></li><li><a href="/blog/?cat=Pakan">Pakan</a></li><li><a href="/blog/?cat=Bisnis">Bisnis</a></li></ul></div>
   <div><h4>Jelajahi</h4><ul><li><a href="/">Beranda</a></li><li><a href="/blog/">Semua artikel</a></li><li><a href="/tentang.html">Tentang kami</a></li><li><a href="/kontak.html">Kontak</a></li><li><a href="/sitemap.xml">Sitemap</a></li><li><a href="/admin/">Login penulis</a></li></ul></div>
   <div><h4>Legal</h4><ul><li><a href="/tos.html">Syarat &amp; Ketentuan</a></li><li><a href="/privasi.html">Kebijakan Privasi</a></li><li><a href="/dmca.html">DMCA &amp; Hak Cipta</a></li><li><a href="/kontak.html">Kontak</a></li></ul></div>
 </div></footer>
@@ -76,7 +76,7 @@ fetch('/content/index.json').then(r=>r.json()).then(posts=>{
     `<a class="tk-tr" href="${linkOf(p)}"><span class="n">0${i+1}</span><span><span class="badge">${p.category||''}</span><span class="t">${p.title}</span></span></a>`
   ).join('') || '<p>Belum ada trending.</p>';
   // Kategori blocks
-  const cats = ['Vitamin','Protein','Herbal','Fitness','Diet','Kesehatan'];
+  const cats = ['Ayam','Kambing','Sapi','Ikan','Pakan','Bisnis'];
   document.getElementById('cats').innerHTML = cats.map(c=>{
     const items = posts.filter(p=>(p.category||'')===c).slice(0,3);
     return `<div class="tk-catblock"><div class="tk-cathead"><h3>${c}</h3><a href="/blog/?cat=${c}">Lihat semua →</a></div>` +

@@ -54,7 +54,7 @@ pilih repo <code>jasasewapbn/esperasupplements</code>, izin <code>Contents: Read
 <label>Judul</label><input id="title" placeholder="Contoh: Panduan Kreatin untuk Pemula Gym" />
 <div class="row">
 <div><label>Slug (otomatis)</label><input id="slug" placeholder="panduan-kreatin-untuk-pemula-gym" /></div>
-<div><label>Kategori</label><select id="category"><option>Vitamin</option><option>Protein</option><option>Herbal</option><option>Fitness</option><option>Diet</option><option>Kesehatan</option></select></div>
+<div><label>Kategori</label><select id="category"><option>Ayam</option><option>Kambing</option><option>Sapi</option><option>Ikan</option><option>Pakan</option><option>Bisnis</option></select></div>
 </div>
 <label>Tanggal</label><input id="date" type="date" />
 <label>Ringkasan (excerpt)</label><input id="excerpt" placeholder="1 kalimat ringkasan untuk kartu artikel" />
@@ -95,7 +95,7 @@ $('clearToken').onclick = () => { localStorage.removeItem('gh_token'); $('token'
 $('pxkey').value = localStorage.getItem('uns_key') || '';
 $('savePx').onclick = () => { localStorage.setItem('uns_key', $('pxkey').value.trim()); setStatus('Key Unsplash tersimpan.', true); };
 $('clearPx').onclick = () => { localStorage.removeItem('uns_key'); $('pxkey').value=''; selPhoto=null; setStatus('Key Unsplash dihapus.', true); };
-const PXQ = {Vitamin:'vitamins supplements',Protein:'protein powder fitness',Herbal:'herbal natural medicine',Fitness:'gym workout',Diet:'healthy food diet',Kesehatan:'healthy lifestyle wellness'};
+const PXQ = {Ayam:'chicken poultry farm',Kambing:'goat farm',Sapi:'cow cattle farm',Ikan:'fish farm pond',Pakan:'grain animal feed',Bisnis:'livestock farm'};
 let selPhoto = null;
 $('pxfind').onclick = async () => {
   try{

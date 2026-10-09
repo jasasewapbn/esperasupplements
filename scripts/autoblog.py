@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Autoblog EsperaSupplements: generate 1 artikel Bahasa Indonesia via DeepSeek + foto Unsplash.
+"""Autoblog ternak: generate 1 artikel Bahasa Indonesia via DeepSeek + foto Unsplash.
 
 Pakai:
-  DEEPSEEK_API_KEY=xxx UNSPLASH_ACCESS_KEY=yyy python3 scripts/autoblog.py --judul "Judul" --kategori Vitamin
+  DEEPSEEK_API_KEY=xxx UNSPLASH_ACCESS_KEY=yyy python3 scripts/autoblog.py --judul "Judul" --kategori Ayam
   DEEPSEEK_API_KEY=xxx UNSPLASH_ACCESS_KEY=yyy python3 scripts/autoblog.py   # ambil antrean teratas
   python3 scripts/autoblog.py --dry-run --judul "Contoh"                     # test tanpa API
 
@@ -12,7 +12,7 @@ Secrets yang dibutuhkan di GitHub Actions:
   - UNSPLASH_ACCESS_KEY  (https://unsplash.com/developers, free 50 req/jam)
 
 Alur: antrean content/antrean-judul.txt (format "Kategori | Judul")
-  -> DeepSeek tulis artikel 500-700 kata
+  -> DeepSeek tulis artikel min. 300 kata (cara + modal + estimasi untung)
   -> Unsplash unduh foto landscape
   -> tulis content/posts/<slug>.md + update content/index.json
   -> hapus baris antrean teratas (hanya jika sukses)
@@ -25,12 +25,12 @@ MODEL = "deepseek-chat"
 
 UNSPLASH_SEARCH = "https://api.unsplash.com/search/photos"
 KATEGORI_QUERY = {
-    "Vitamin": "vitamins supplements pills",
-    "Protein": "protein powder fitness nutrition",
-    "Herbal": "herbal natural medicine",
-    "Fitness": "gym workout fitness",
-    "Diet": "healthy food diet nutrition",
-    "Kesehatan": "healthy lifestyle wellness",
+    "Ayam": "chicken poultry farm",
+    "Kambing": "goat farm",
+    "Sapi": "cow cattle farm",
+    "Ikan": "fish farm pond",
+    "Pakan": "grain animal feed agriculture",
+    "Bisnis": "livestock farm",
 }
 KATEGORI_VALID = list(KATEGORI_QUERY.keys())
 
@@ -40,24 +40,23 @@ POSTS = os.path.join(REPO_DIR, "content", "posts")
 INDEX = os.path.join(REPO_DIR, "content", "index.json")
 
 SYSTEM = (
-    "Kamu penulis blog suplemen dan nutrisi Indonesia untuk EsperaSupplements. "
-    "Tulis artikel ORISINAL Bahasa Indonesia yang ramah, akurat, dan praktis. "
-    "WAJIB 500-700 KATA (jangan berhenti sebelum 500 kata). "
-    "Struktur: 3-4 subjudul markdown (##), satu list bullet, satu contoh angka "
-    "(dosis, harga, atau contoh konsumsi harian dalam rupiah). "
-    "Bahas manfaat, cara konsumsi yang benar, efek samping / peringatan, dan tips memilih produk. "
-    "Dilarang menjiplak, dilarang klaim berlebihan ('menyembuhkan', 'pasti sembuh'). "
-    "Gunakan bahasa awam. Akhiri dengan disclaimer 1 kalimat: "
-    "ini edukasi, bukan saran medis — konsultasikan ke dokter/apoteker untuk kondisi khusus."
+    "Kamu penulis blog bisnis ternak Indonesia. Tulis artikel ORISINAL Bahasa Indonesia "
+    "yang praktis, membumi, dan jujur soal uang. WAJIB minimal 300 KATA. "
+    "Struktur: 3-4 subjudul markdown (##) yang mencakup: cara memulai atau langkah beternak, "
+    "rincian modal (contoh angka rupiah: bibit, kandang, pakan), estimasi keuntungan per siklus "
+    "atau per bulan, serta risiko dan tips agar tidak rugi. Dilarang menjanjikan pasti untung; "
+    "pakai estimasi realistis dan ingatkan bahwa harga bibit, pakan, dan jual fluktuatif per daerah "
+    "dan per musim. Akhiri dengan disclaimer 1 kalimat: ini edukasi, bukan saran finansial — "
+    "sesuaikan dengan kondisi dan harga di daerahmu."
 )
 
 JUDUL_CADANGAN = [
-    "Vitamin | 7 Tanda Tubuh Kekurangan Vitamin D dan Cara Mengatasinya",
-    "Protein | Whey vs Isolate vs Casein: Mana yang Cocok untuk Pemula?",
-    "Herbal | Kunyit, Jahe, dan Temulawak: Panduan Suplemen Herbal Harian",
-    "Fitness | Suplemen Pre-Workout: Isi, Fungsi, dan Cara Pakai yang Aman",
-    "Diet | Defisit Kalori Tanpa Lemas: Peran Multivitamin Saat Diet",
-    "Kesehatan | Cara Membaca Label Suplemen: Dosis, Serving, dan %AKG",
+    "Ayam | Ternak Ayam Petelur 100 Ekor: Modal, Pakan, dan Untung per Bulan 2026",
+    "Kambing | Modal Ternak 5 Ekor Kambing: Rincian Biaya Lengkap",
+    "Sapi | Penggemukan Sapi Potong 90 Hari: Modal, Pakan, dan Margin",
+    "Ikan | Budidaya Lele Kolam Terpal: Modal 1 Juta Untung Berapa?",
+    "Pakan | Maggot BSF: Budidaya dan Harga Jual per Kg 2026",
+    "Bisnis | Mulai Ternak dengan Modal 1 Juta: 5 Pilihan Hewan",
 ]
 
 
@@ -104,11 +103,11 @@ def pop_queue():
     first = lines[0]
     if " | " in first:
         kat, judul = first.split(" | ", 1)
-        kat = kat.strip() or "Kesehatan"
+        kat = kat.strip() or "Bisnis"
         if kat not in KATEGORI_VALID:
-            kat = "Kesehatan"
+            kat = "Bisnis"
         return kat, judul.strip()
-    return "Kesehatan", first
+    return "Bisnis", first
 
 
 def hapus_kepala(baris_mentah):
@@ -120,7 +119,7 @@ def hapus_kepala(baris_mentah):
 
 def generate(judul, kategori, dry_run):
     if dry_run:
-        return (f"RINGKASAN: Panduan praktis tentang {judul} untuk pemula.\n"
+        return (f"RINGKASAN: Panduan praktis {judul} untuk pemula.\n"
                 f"## Pengantar\n\nArtikel tentang **{judul}**.\n\n"
                 f"## Poin penting\n\n- Poin 1\n- Poin 2\n\n*Draf dry-run.*")
     key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
@@ -132,10 +131,10 @@ def generate(judul, kategori, dry_run):
             {"role": "system", "content": SYSTEM},
             {"role": "user", "content": (
                 f"Tulis artikel lengkap berjudul: {judul}\nKategori: {kategori}\n"
-                "Panjang WAJIB 500-700 kata. Awali dengan ringkasan 1 kalimat "
+                "Panjang WAJIB minimal 300 kata. Awali dengan ringkasan 1 kalimat "
                 "diawali 'RINGKASAN: ', lalu isi artikel markdown.")},
         ],
-        "temperature": 0.8, "max_tokens": 2000,
+        "temperature": 0.8, "max_tokens": 1500,
     }).encode()
     req = urllib.request.Request(API_URL, data=payload,
                                  headers={"Authorization": "Bearer " + key,
@@ -159,14 +158,14 @@ def ambil_gambar_unsplash(slug, kategori):
         print("INFO: UNSPLASH_ACCESS_KEY kosong — artikel tanpa foto.")
         return None
     try:
-        q = KATEGORI_QUERY.get(kategori, "supplements health")
+        q = KATEGORI_QUERY.get(kategori, "livestock farm")
         url = UNSPLASH_SEARCH + "?" + urllib.parse.urlencode(
             {"query": q, "per_page": 3, "orientation": "landscape",
              "content_filter": "high"})
         req = urllib.request.Request(
             url, headers={"Authorization": f"Client-ID {key}",
                           "Accept-Version": "v1",
-                          "User-Agent": "EsperaSupplements-Autoblog/1.0"})
+                          "User-Agent": "Ternak-Autoblog/1.0"})
         with urllib.request.urlopen(req, timeout=30) as r:
             data = json.load(r) or {}
         fotos = data.get("results") or []
@@ -178,7 +177,6 @@ def ambil_gambar_unsplash(slug, kategori):
         src = urls.get("regular") or urls.get("full") or urls.get("raw")
         if not src:
             return None
-        # tambah param unduh w=1200&q=80 sesuai panduan Unsplash
         sep = "&" if "?" in src else "?"
         src_dl = f"{src}{sep}w=1200&q=80&fm=jpg"
         dest = os.path.join(REPO_DIR, "content", "images", slug + ".jpg")
@@ -191,7 +189,6 @@ def ambil_gambar_unsplash(slug, kategori):
         user = (foto.get("user") or {})
         nama = user.get("name", "Unsplash")
         user_link = (user.get("links") or {}).get("html", "https://unsplash.com")
-        # trigger download endpoint (aturan API Unsplash) — best effort
         try:
             dl_ep = (foto.get("links") or {}).get("download_location")
             if dl_ep:
@@ -202,7 +199,7 @@ def ambil_gambar_unsplash(slug, kategori):
         print(f"OK gambar: content/images/{slug}.jpg (oleh {nama})")
         return {"image": f"/content/images/{slug}.jpg",
                 "credit": f"Foto oleh {nama} di Unsplash",
-                "url": f"{user_link}?utm_source=esperasupplements&utm_medium=referral"}
+                "url": f"{user_link}?utm_source=ternakblog&utm_medium=referral"}
     except Exception as e:
         print(f"INFO: gambar dilewati ({e})")
         return None
@@ -217,10 +214,9 @@ def main():
 
     q_kat, q_judul = pop_queue() if not a.judul.strip() else ("", "")
     judul = a.judul.strip() or q_judul
-    kategori = a.kategori.strip() or q_kat or "Kesehatan"
+    kategori = a.kategori.strip() or q_kat or "Bisnis"
     if kategori not in KATEGORI_VALID:
-        kategori = "Kesehatan"
-    # antrean habis -> pakai judul cadangan agar jadwal 5-jam-an tidak gagal
+        kategori = "Bisnis"
     dari_antrean = not a.judul.strip() and bool(q_judul)
     baris_mentah = next((l for l in baca_antrean()
                          if l == judul or l.endswith(" | " + judul)), judul) if judul else ""
@@ -238,8 +234,8 @@ def main():
 
     teks = generate(judul, kategori, a.dry_run)
     ringkasan, isi = split_hasil(teks)
-    if not a.dry_run and hitung_kata(isi) < 350:
-        sys.exit(f"ERROR: artikel terlalu pendek ({hitung_kata(isi)} kata, minimal 350) — "
+    if not a.dry_run and hitung_kata(isi) < 250:
+        sys.exit(f"ERROR: artikel terlalu pendek ({hitung_kata(isi)} kata, minimal 250) — "
                  f"tidak diterbitkan agar blog tidak rusak.")
 
     os.makedirs(POSTS, exist_ok=True)
