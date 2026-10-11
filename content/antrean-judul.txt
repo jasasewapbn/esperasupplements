@@ -40,7 +40,6 @@ Sapi | Cara Memilih Bakalan Pedet Sapi Berkualitas
 Sapi | Pupuk dari Kotoran Sapi: Penghasilan Tambahan
 Sapi | Asuransi Ternak Sapi: Premi dan Cara Klaim
 Sapi | Simulasi Untung Ternak 2 Ekor Sapi dalam Setahun
-Ikan | Lele vs Nila vs Gurame: Mana Paling Cuan 2026?
 Ikan | Sistem Bioflok Lele: Biaya Setup dan Hemat Pakan
 Ikan | Maggot BSF untuk Lele: Tekan Biaya Pakan hingga 50%
 Ikan | Budidaya Nila Salin: Peluang di Lahan Pesisir
