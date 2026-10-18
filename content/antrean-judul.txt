@@ -7,7 +7,6 @@ Ayam | Kemitraan Ayam Broiler: Simulasi Bonus dan Dendanya
 Ayam | Telur Omega-3 dan Telur Herbal: Nilai Jual Lebih Tinggi
 Ayam | Ayam Hias Serama dan Kate: Bisnis Hobi Berharga Jutaan
 Ayam | Pencatatan Keuangan Ternak Ayam: Template Sederhana per Siklus
-Kambing | Sistem Gaduh (Bagi Hasil) Kambing di Desa: Aturannya
 Kambing | Susu Kambing Etawa: Olahan dan Harga Jual per Liter
 Kambing | Kandang Kambing Panggung: Ukuran Ideal dan Biaya Kayu
 Kambing | Cacingan dan Kembung pada Kambing: Obat dan Pencegahan
