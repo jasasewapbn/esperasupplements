@@ -26,7 +26,6 @@ Ikan | Belut dan Sidat: Komoditas Ekspor Harga Tinggi
 Ikan | Pelet Pabrik vs Buatan Sendiri: Hitungan per Kg
 Ikan | Jual ke Pengepul vs Langsung: Selisih Harganya
 Ikan | Aerator dan Pompa Kolam: Biaya Listrik per Bulan
-Pakan | Probiotik Ternak: Cara Buat Sendiri dengan EM4 dan Molase
 Pakan | Rumput Odot dan Pakchong: Panen 40 Hari Sekali
 Pakan | Ampas Tahu dan Ampas Bir: Pakan Gratis dari Pabrik
 Pakan | Proyeksi Harga Pakan 2026-2027 dan Strategi Stok
