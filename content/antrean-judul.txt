@@ -10,7 +10,6 @@ Sapi | Cara Memilih Bakalan Pedet Sapi Berkualitas
 Sapi | Pupuk dari Kotoran Sapi: Penghasilan Tambahan
 Sapi | Asuransi Ternak Sapi: Premi dan Cara Klaim
 Sapi | Simulasi Untung Ternak 2 Ekor Sapi dalam Setahun
-Ikan | Udang Vaname Tambak Mini: Modal dan Risikonya
 Ikan | Belut dan Sidat: Komoditas Ekspor Harga Tinggi
 Ikan | Pelet Pabrik vs Buatan Sendiri: Hitungan per Kg
 Ikan | Jual ke Pengepul vs Langsung: Selisih Harganya
