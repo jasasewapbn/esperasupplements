@@ -13,7 +13,6 @@ Ikan | Aerator dan Pompa Kolam: Biaya Listrik per Bulan
 Pakan | Fermentasi Gedebog Pisang untuk Pakan Kambing
 Pakan | Mineral Blok untuk Sapi dan Kambing: Cara Pakai
 Pakan | Cangkang Telur sebagai Kalsium Ayam Petelur
-Bisnis | Sewa Lahan untuk Kandang: Hitungan per Tahun
 Bisnis | Upah Anak Kandang: Gaji dan Sistem Bagi Hasil
 Bisnis | Risiko Ternak 2026-2027: Pakan, Penyakit, dan Pasar
 Bisnis | Diversifikasi: Ayam + Lele + Maggot dalam 1 Lahan
