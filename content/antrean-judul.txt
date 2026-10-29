@@ -4,7 +4,6 @@ Kambing | Pejantan Unggul: Investasi Sekali Panen Berkali-kali
 Kambing | Arisan Qurban: Model Bisnis Penjualan Kambing Modern
 Sapi | Asuransi Ternak Sapi: Premi dan Cara Klaim
 Sapi | Simulasi Untung Ternak 2 Ekor Sapi dalam Setahun
-Ikan | Pelet Pabrik vs Buatan Sendiri: Hitungan per Kg
 Ikan | Jual ke Pengepul vs Langsung: Selisih Harganya
 Ikan | Aerator dan Pompa Kolam: Biaya Listrik per Bulan
 Pakan | Fermentasi Gedebog Pisang untuk Pakan Kambing
