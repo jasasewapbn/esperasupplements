@@ -3,7 +3,6 @@ Kambing | Arisan Qurban: Model Bisnis Penjualan Kambing Modern
 Sapi | Simulasi Untung Ternak 2 Ekor Sapi dalam Setahun
 Ikan | Aerator dan Pompa Kolam: Biaya Listrik per Bulan
 Pakan | Cangkang Telur sebagai Kalsium Ayam Petelur
-Bisnis | Risiko Ternak 2026-2027: Pakan, Penyakit, dan Pasar
 Bisnis | Diversifikasi: Ayam + Lele + Maggot dalam 1 Lahan
 Bisnis | Ekspor Sarang Walet dan Belut: Syarat dan Pembeli
 Bisnis | Gedung Walet 4x8: Modal Bangun dan Simulasi Panen Sarang
